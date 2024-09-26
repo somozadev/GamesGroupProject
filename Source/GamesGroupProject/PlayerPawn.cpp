@@ -2,6 +2,7 @@
 
 
 #include "PlayerPawn.h"
+#include "Components/InputComponent.h"
 
 // Sets default values
 APlayerPawn::APlayerPawn()
@@ -18,6 +19,18 @@ void APlayerPawn::BeginPlay()
 	
 }
 
+void APlayerPawn::MoveForward(float Value)
+{
+	FVector Forward = GetActorForwardVector();
+	AddMovementInput(Forward, Value);
+}
+
+void APlayerPawn::MoveRight(float Value)
+{
+	FVector Right = GetActorRightVector();
+	AddMovementInput(Right, Value);
+}
+
 // Called every frame
 void APlayerPawn::Tick(float DeltaTime)
 {
@@ -29,6 +42,9 @@ void APlayerPawn::Tick(float DeltaTime)
 void APlayerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	PlayerInputComponent->BindAxis("MoveForward", this, &APlayerPawn::MoveForward);
+	PlayerInputComponent->BindAxis("MoveRight", this, &APlayerPawn::MoveRight);
+
 
 }
 
