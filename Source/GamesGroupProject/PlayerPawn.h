@@ -10,6 +10,18 @@ UCLASS()
 class GAMESGROUPPROJECT_API APlayerPawn : public APawn
 {
 	GENERATED_BODY()
+	/** mesh component giving our player a visual representation of a cube
+	in the world */
+	UPROPERTY(VisableAnywhere, CPF_BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+		class UStaticMeshComponent* MeshComponent;
+
+	/** camera boom to position the camera behind the pawn */
+	UPROPERTY(VisableAnywhere, CPF_BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+		class USpringArmComponent* CameraBoom;
+
+	/** Follow Camera  */
+	UPROPERTY(VisableAnywhere, CPF_BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+		class UCameraComponent* FollowCamera;
 
 public:
 	// Sets default values for this pawn's properties
@@ -31,5 +43,6 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
 
 };

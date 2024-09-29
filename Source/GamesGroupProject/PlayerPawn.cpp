@@ -46,5 +46,6 @@ void APlayerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	PlayerInputComponent->BindAxis("MoveRight", this, &APlayerPawn::MoveRight);
 
 
+
 }
 
