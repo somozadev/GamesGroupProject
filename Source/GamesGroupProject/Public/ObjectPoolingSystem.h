@@ -16,15 +16,13 @@ public:
 	AObjectPoolingSystem();
 
 protected:
+	TArray<TQueue<AActor*>> m_pool;
+
 	UPROPERTY(EditAnywhere, Category = ObjectPoolSettings)
 		TArray<TSubclassOf<AActor>> m_objects;
 
 	UPROPERTY(EditAnywhere, Category = ObjectPoolSettings)
 		TArray<int> m_numToSpawn;
-
-	TArray<TArray<AActor*>> m_pool;
-	TArray<int> m_nextToSpawn;
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
