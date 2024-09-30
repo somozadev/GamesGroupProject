@@ -34,14 +34,22 @@ void APlayerPawn::BeginPlay()
 
 void APlayerPawn::MoveForward(float Value)
 {
-	FVector Forward = GetActorForwardVector();
-	AddMovementInput(Forward, Value);
+	if (Value != 0.0f)
+	{
+		UE_LOG(LogTemp,Warning, TEXT("MoveForward: %f"),Value)
+	}
+	/*FVector Forward = GetActorForwardVector();
+	AddMovementInput(Forward, Value);*/
 }
 
 void APlayerPawn::MoveRight(float Value)
 {
-	FVector Right = GetActorRightVector();
-	AddMovementInput(Right, Value);
+	if (Value != 0.0)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("MoveForward: %f"), Value)
+	}
+	/*FVector Right = GetActorRightVector();
+	AddMovementInput(Right, Value);*/
 }
 
 // Called every frame
