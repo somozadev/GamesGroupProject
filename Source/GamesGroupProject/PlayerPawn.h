@@ -24,11 +24,11 @@ class GAMESGROUPPROJECT_API APlayerPawn : public APawn
 		class UCameraComponent* FollowCamera;
 
 	/** speed to scale movement by */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Input, meta = (AllowPrivateAccess = "true"))
 	float Speed;
 
 	/** Store X and Y components of pawns direction */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	FVector2D Direction;
 
 public:
