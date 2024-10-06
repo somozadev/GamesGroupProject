@@ -24,12 +24,12 @@ class GAMESGROUPPROJECT_API APlayerPawn : public APawn
 		class UCameraComponent* FollowCamera;
 
 	/** speed to scale movement by */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Input, meta = (AllowPrivateAccess = "true"))
-	float Speed;
+	/*UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Input, meta = (AllowPrivateAccess = "true"))
+	float Speed;*/
 
 	/** Store X and Y components of pawns direction */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	FVector2D Direction;
+	/*UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	FVector2D Direction;*/
 
 public:
 	// Sets default values for this pawn's properties
@@ -43,6 +43,10 @@ protected:
 	void MoveForward(float Value);
 	// Called for right and left player movement
 	void MoveRight(float Value);
+	// Called for looking up
+	void LookUp(float Value);
+	// Called for rotation
+	void Rotate(float Value);
 
 
 
