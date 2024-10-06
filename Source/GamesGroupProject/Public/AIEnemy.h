@@ -29,11 +29,23 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Behavior", Meta = (MakeEditWidget = true))
 		FVector m_patrolPoint4;
 
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "EnemyStats")
+		int m_maxHealth;
+
 	class ABaseAIEnemyController* m_controller;
+	AActor* m_playerCharacter;
+	int m_currentHealth;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	virtual void ConsiderAttack();
+
+	void AttackA();
+	void AttackB();
+	void AttackC();
 
 public:	
 	// Called every frame
@@ -42,4 +54,5 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	friend class UBTTaskAttack;
 };
