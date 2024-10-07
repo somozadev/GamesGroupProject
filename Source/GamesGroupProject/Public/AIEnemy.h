@@ -36,6 +36,7 @@ protected:
 	class ABaseAIEnemyController* m_controller;
 	AActor* m_playerCharacter;
 	int m_currentHealth;
+	bool m_isAlive = true;
 
 protected:
 	// Called when the game starts or when spawned
@@ -50,6 +51,12 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UFUNCTION(BlueprintCallable)
+		bool TakeDamage(int damage);
+
+	UFUNCTION(BlueprintCallable)
+		bool GetIsAlive();
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

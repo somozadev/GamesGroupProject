@@ -61,6 +61,7 @@ void AAIEnemy::ConsiderAttack()
 	}
 }
 
+//TO DO: Play animation and deal damage to player. Can be done once this branch is merged
 void AAIEnemy::AttackA()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, FString::Printf(TEXT("I just did attack A")));
@@ -81,6 +82,9 @@ void AAIEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (!m_isAlive)
+		return;
+
 	if (!m_playerCharacter)
 		m_playerCharacter = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
 
@@ -96,6 +100,18 @@ void AAIEnemy::Tick(float DeltaTime)
 	{
 		m_controller->GetBlackboard()->SetValueAsBool(TEXT("IsInChaseRange"), false);
 	}
+}
+
+bool AAIEnemy::TakeDamage(int damage)
+{
+	m_currentHealth -= damage;
+	//TO DO: Play death animation/deactivate if enemy dies
+	return m_currentHealth <= 0;
+}
+
+bool AAIEnemy::GetIsAlive()
+{
+	return m_isAlive;
 }
 
 // Called to bind functionality to input
