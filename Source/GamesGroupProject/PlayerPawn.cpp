@@ -5,6 +5,8 @@
 #include "Components/InputComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "GameFramework/FloatingPawnMovement.h"
+#include "GameFramework/Controller.h"
 
 // Sets default values
 APlayerPawn::APlayerPawn()
@@ -23,6 +25,19 @@ APlayerPawn::APlayerPawn()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 
 
+	// dont rotate when the controller roates.
+	//bUseControllerRotationPitch = false;
+	//bUseControllerRotationYaw = false;
+	//bUseControllerRotationRoll = false;
+
+	// config movement
+
+	AutoPossessPlayer = EAutoReceiveInput::Player0;
+	
+
+
+	/*Speed = 500;
+	Direction = FVector2D(0.f, 0.f);*/
 }
 
 // Called when the game starts or when spawned
@@ -34,20 +49,54 @@ void APlayerPawn::BeginPlay()
 
 void APlayerPawn::MoveForward(float Value)
 {
-	FVector Forward = GetActorForwardVector();
-	AddMovementInput(Forward, Value);
+	if (Controller && Value != 0.0f)
+	{
+		//UE_LOG(LogTemp,Warning, TEXT("MoveForward: %f"),Value)
+		FVector Forward = GetActorForwardVector();
+		AddMovementInput(Forward, Value);
+	}
+
+	//Direction.X = Value;
+	/*FVector Forward = GetActorForwardVector();
+	AddMovementInput(Forward, Value);*/
 }
 
 void APlayerPawn::MoveRight(float Value)
 {
-	FVector Right = GetActorRightVector();
-	AddMovementInput(Right, Value);
+	if (Controller && Value != 0.0)
+	{
+		//UE_LOG(LogTemp, Warning, TEXT("MoveForward: %f"), Value)
+		FVector Right = GetActorRightVector();
+		AddMovementInput(Right, Value);
+	}
+
+	//Direction.Y = Value;
+	/*FVector Right = GetActorRightVector();
+	AddMovementInput(Right, Value);*/
+}
+
+void APlayerPawn::LookUp(float Value)
+{
+	AddControllerPitchInput(Value);
+}
+
+void APlayerPawn::Rotate(float Value)
+{
+	AddControllerYawInput(Value);
 }
 
 // Called every frame
 void APlayerPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	/*FVector Location = GetActorLocation();
+	FVector DeltaLocation = FVector(Direction.X, Direction.Y, 0.f);
+	DeltaLocation.Normalize();
+	DeltaLocation *= Speed * DeltaTime;
+	Location += DeltaLocation;
+
+	SetActorLocation(Location);*/
 
 }
 
@@ -57,7 +106,9 @@ void APlayerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	PlayerInputComponent->BindAxis("MoveForward", this, &APlayerPawn::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &APlayerPawn::MoveRight);
-
+	PlayerInputComponent->BindAxis("LookUp", this, &APlayerPawn::LookUp);
+	PlayerInputComponent->BindAxis("Rotate", this, &APlayerPawn::Rotate);
+	
 
 
 }
