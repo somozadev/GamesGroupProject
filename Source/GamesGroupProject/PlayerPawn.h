@@ -23,6 +23,7 @@ class GAMESGROUPPROJECT_API APlayerPawn : public APawn
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 		class UCameraComponent* FollowCamera;
 
+	
 	/** speed to scale movement by */
 	/*UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Input, meta = (AllowPrivateAccess = "true"))
 	float Speed;*/
