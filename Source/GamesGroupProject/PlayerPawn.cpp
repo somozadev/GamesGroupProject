@@ -5,7 +5,6 @@
 #include "Components/InputComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "GameFramework/FloatingPawnMovement.h"
 #include "GameFramework/Controller.h"
 
 // Sets default values
@@ -25,7 +24,7 @@ APlayerPawn::APlayerPawn()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 
 
-	// dont rotate when the controller roates.
+	// don't rotate when the controller rotates.
 	//bUseControllerRotationPitch = false;
 	//bUseControllerRotationYaw = false;
 	//bUseControllerRotationRoll = false;
@@ -107,7 +106,7 @@ void APlayerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	PlayerInputComponent->BindAxis("MoveForward", this, &APlayerPawn::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &APlayerPawn::MoveRight);
 	PlayerInputComponent->BindAxis("LookUp", this, &APlayerPawn::LookUp);
-	PlayerInputComponent->BindAxis("Rotate", this, &APlayerPawn::Rotate);
+	//PlayerInputComponent->BindAxis("Rotate", this, &APlayerPawn::Rotate);
 	
 
 
