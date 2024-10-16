@@ -29,6 +29,10 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Behavior", Meta = (MakeEditWidget = true))
 		FVector m_patrolPoint4;
 
+	unsigned int m_nearestPatrolPoint = 1;
+	bool m_isInChaseRange = false;
+	FVector m_currentPatrolTarget;
+
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "EnemyStats")
 		int m_maxHealth;
@@ -47,6 +51,7 @@ protected:
 	void AttackA();
 	void AttackB();
 	void AttackC();
+	void CalculateNearestPatrolPoint();
 
 public:	
 	// Called every frame
