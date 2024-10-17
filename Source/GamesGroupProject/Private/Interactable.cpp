@@ -26,15 +26,13 @@ void AInteractable::BeginPlay()
 {
 	Super::BeginPlay();
 	targetPlayer = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
-	UEventsManager* EventManager = UEventsManager::Get();
-	if (!EventManager->EventMap.Contains("OnPickUp"))
-	{
-		EventManager->EventMap.Add("OnPickUp", FOnCustomEvent());
-		UE_LOG(LogTemp, Warning, TEXT("Initialized event OnPickUp"));
-	}
-FOnCustomEvent& eventDelegate = EventManager->EventMap["OnPickUp"];
+
+	// These three lines are all it takes to create a new event and add it to the events class
+	//To invoke the event, you just need to call UEventsManager::Get()->Invoke("EventNameToInvoke") and that's about it 
+	FOnCustomEvent eventDelegate = FOnCustomEvent();
 	eventDelegate.AddDynamic(this, &AInteractable::ExampleEventUsage);
-	UE_LOG(LogTemp, Warning, TEXT("Subscribed to OnPickUp event"));
+	UEventsManager::Get()->EventMap.Add("OnPickedUp", eventDelegate);
+
 }
 
 void AInteractable::ExampleEventUsage()
@@ -77,13 +75,11 @@ void AInteractable::Tick(float DeltaTime)
 			isCharmed = false;
 		}
 	}
-
 }
 
 void AInteractable::Interact(AActor* interactorActor)
 {
 	PerformInteraction(interactorActor);
-
 }
 
 void AInteractable::HandlePickup(AActor* interactorActor)

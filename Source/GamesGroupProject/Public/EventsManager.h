@@ -24,5 +24,18 @@ private:
     // Singleton instance
     static UEventsManager* Instance;
 
-protected:
+    /*
+    * Example of use: 
+    * inside the beginPlay of the c++ class i want to use the event manager 
+    *
+    *	FOnCustomEvent eventDelegate = FOnCustomEvent();
+        eventDelegate.AddDynamic(this, &AInteractable::ExampleMethodThatWillBeCalledWhenEventGetsInvoked);
+        UEventsManager::Get()->EventMap.Add("EventName", eventDelegate);
+    *
+    *
+        Then, to invoke the even simply call: 
+        UEventsManager::Get()->Invoke("EventNameToInvoke")
+    */
+
+    
 };

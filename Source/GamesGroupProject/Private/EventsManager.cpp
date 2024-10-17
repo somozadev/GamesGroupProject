@@ -39,8 +39,12 @@ void UEventsManager::Invoke(FName EventName)
     if (EventMap.Contains(EventName))
     {
         EventMap[EventName].Broadcast();
+        UE_LOG(LogTemp, Warning, TEXT("Event %s invoked."), *EventName.ToString());
+    }
+    else
+    {
+        UE_LOG(LogTemp, Warning, TEXT("asadsdad"));
     }
 
-    UE_LOG(LogTemp, Warning, TEXT("Event %s invoked."), *EventName.ToString());
 }
 
