@@ -3,7 +3,10 @@
 #include "Interactable.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/Pawn.h"
+#include "EventManager.h"
 #include <Kismet/GameplayStatics.h>
+#include <string>
+#include <EventsManager.h>
 
 AInteractable::AInteractable()
 {
@@ -23,7 +26,20 @@ void AInteractable::BeginPlay()
 {
 	Super::BeginPlay();
 	targetPlayer = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+	UEventsManager* EventManager = UEventsManager::Get();
+	if (!EventManager->EventMap.Contains("OnPickUp"))
+	{
+		EventManager->EventMap.Add("OnPickUp", FOnCustomEvent());
+		UE_LOG(LogTemp, Warning, TEXT("Initialized event OnPickUp"));
+	}
+FOnCustomEvent& eventDelegate = EventManager->EventMap["OnPickUp"];
+	eventDelegate.AddDynamic(this, &AInteractable::ExampleEventUsage);
+	UE_LOG(LogTemp, Warning, TEXT("Subscribed to OnPickUp event"));
+}
 
+void AInteractable::ExampleEventUsage()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Event called and method invoked!"));
 }
 
 void AInteractable::PerformInteraction(AActor* interactorActor)
@@ -67,12 +83,14 @@ void AInteractable::Tick(float DeltaTime)
 void AInteractable::Interact(AActor* interactorActor)
 {
 	PerformInteraction(interactorActor);
+
 }
 
 void AInteractable::HandlePickup(AActor* interactorActor)
 {
 	// give obj_id to player, need inventory and items ids table first for this
 	UE_LOG(LogTemp, Warning, TEXT("Object picked up!"));
+	UEventsManager::Get()->Invoke("OnPickedUp");
 	Destroy();
 }
 
