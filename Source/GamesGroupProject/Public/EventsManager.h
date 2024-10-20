@@ -5,6 +5,8 @@
 #include "EventsManager.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnCustomEvent); 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCustomEventOneParam, FString, Param1);
+
 
 UCLASS()
 class GAMESGROUPPROJECT_API UEventsManager : public UObject
@@ -16,10 +18,16 @@ public:
     static UEventsManager* Get();
 
     void Subscribe(FName eventName, FOnCustomEvent::FDelegate& delegateEvent);
-    void Unsubscribe(FName EventName, FOnCustomEvent::FDelegate& Delegate);
+    void Unsubscribe(FName eventName, FOnCustomEvent::FDelegate& delegateEvent);
     void Invoke(FName EventName);
+    
+    void Subscribe(FName eventName, FOnCustomEventOneParam::FDelegate& delegateEvent);
+    void Unsubscribe(FName eventName, FOnCustomEventOneParam::FDelegate& delegateEvent);
+    void Invoke(FName eventName, FString param);
 
+    
     TMap<FName, FOnCustomEvent> EventMap;
+    TMap<FName, FOnCustomEventOneParam> EventMapOneParam;
 private:
     // Singleton instance
     static UEventsManager* Instance;
