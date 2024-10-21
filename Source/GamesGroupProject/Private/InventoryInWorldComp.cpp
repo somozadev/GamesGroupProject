@@ -20,8 +20,8 @@ void AInventoryInWorldComp::BeginPlay()
 	
 	
 	UE_LOG(LogTemp, Warning, TEXT("Inventory Activating"));
-	FString s = InvCardPossible;
-	UE_LOG(LogTemp, Warning, TEXT("%s"), *s);
+//	FString s = InvCardPossible;
+	
 	///for ()
 	//{
 	//	FString s = NamedPoint.ToString();

@@ -14,7 +14,8 @@ class GAMESGROUPPROJECT_API AInventoryInWorldComp : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AInventoryInWorldComp();
-	UDataTable* InvCardPossible=LoadObject<UDataTable>(GetWorld(), TEXT("/Game/GroupProject/Inventory/AvalibleCards.AvalibleCards"));
+	UPROPERTY(EditAnywhere)
+	UDataTable* InvCardPossible;
 	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
