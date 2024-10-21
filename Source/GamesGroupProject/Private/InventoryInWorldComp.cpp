@@ -2,7 +2,7 @@
 
 
 #include "InventoryInWorldComp.h"
-
+#include "/Game/GroupProject/Inventory/CardBaseLine.CardBaseLine"
 
 // Sets default values
 AInventoryInWorldComp::AInventoryInWorldComp()
@@ -21,12 +21,15 @@ void AInventoryInWorldComp::BeginPlay()
 	
 	UE_LOG(LogTemp, Warning, TEXT("Inventory Activating"));
 //	FString s = InvCardPossible;
+	TArray <struct CardBaseLine*> Outputingpoint;
+	FString a;
+	InvCardPossible->GetAllRows(a, Outputingpoint);
 	
-	///for ()
-	//{
-	//	FString s = NamedPoint.ToString();
-	//	UE_LOG(LogTemp, Warning, TEXT("%s"), *s);
-	//}
+	for (struct CardBaseLine* NamedPoint:Outputingpoint )
+	{
+		FString s = NamedPoint;
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *s);
+	}
 }
 
 // Called every frame
