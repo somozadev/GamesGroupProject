@@ -55,34 +55,14 @@ void AAIEnemy::BeginPlay()
 void AAIEnemy::ConsiderAttack()
 {
 	//TODO - Decision making for what attack to do. Will override in children
+	//Will do this in children rather than in base class. Base will just default to the first attack if it exists
+	if (m_attackComponents.Num() == 0)
+		return;
 	
-	int rng = rand() % 10;
-
-	switch (rng)
-	{
-	case 0:
-	case 1:
-	case 2:
-	case 3:
-	case 4:
-		if (m_attackComponents[0])
-		{
-			m_attackComponents[0]->PerformAttack(m_playerCharacter, this);
-		}
-		AttackA();
-		break;
-	case 5:
-	case 6:
-	case 7:
-		AttackB();
-		break;
-	case 8:
-	case 9:
-		AttackC();
-		break;
-	default:
-		break;
-	}
+	if (m_attackComponents[0] != nullptr)
+    {
+    	m_attackComponents[0]->PerformAttack(m_playerCharacter, this);
+    }
 }
 
 //TO DO: Play animation and deal damage to player. Can be done once this branch is merged
