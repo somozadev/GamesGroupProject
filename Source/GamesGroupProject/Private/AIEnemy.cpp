@@ -40,11 +40,22 @@ void AAIEnemy::BeginPlay()
 	m_currentPatrolTarget = m_patrolPoint1;
 	m_controller->GetBlackboard()->SetValueAsVector(TEXT("PatrolTarget"), m_patrolPoint1);
 	m_controller->GetBlackboard()->SetValueAsBool(TEXT("IsInChaseRange"), false);
+
+	TArray<UActorComponent*> components = GetComponentsByTag(UAttackComponent::StaticClass(), FName("AttackComp"));
+	for (int i = 0; i < components.Num(); i++)
+	{
+		UAttackComponent* attackComp = Cast<UAttackComponent>(components[i]);
+		if (attackComp)
+		{
+			m_attackComponents.Add(attackComp);
+		}
+	}
 }
 
 void AAIEnemy::ConsiderAttack()
 {
 	//TODO - Decision making for what attack to do. Will override in children
+	
 	int rng = rand() % 10;
 
 	switch (rng)
@@ -54,6 +65,10 @@ void AAIEnemy::ConsiderAttack()
 	case 2:
 	case 3:
 	case 4:
+		if (m_attackComponents[0])
+		{
+			m_attackComponents[0]->PerformAttack(m_playerCharacter, this);
+		}
 		AttackA();
 		break;
 	case 5:
@@ -197,7 +212,7 @@ void AAIEnemy::Tick(float DeltaTime)
 	}
 }
 
-bool AAIEnemy::TakeDamage(int damage)
+bool AAIEnemy::TakeAttackDamage(int damage)
 {
 	m_currentHealth -= damage;
 	//TO DO: Play death animation/deactivate if enemy dies
