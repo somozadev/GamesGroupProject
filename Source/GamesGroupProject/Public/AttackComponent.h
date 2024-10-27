@@ -24,6 +24,8 @@ protected:
 		float m_damage = 1;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "AttackData")
 		float m_knockbackPower = 0.0f;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "AttackData")
+		float m_knockbackHeight = 100.0f;
 
 public:	
 	// Called every frame

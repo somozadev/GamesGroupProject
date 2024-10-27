@@ -6,11 +6,12 @@
 #include  "AIEnemy.h"
 #include "PlayerHealthComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 UAttackComponent_Pushback::UAttackComponent_Pushback()
 {
 	m_damage = 1.0f;
-	m_knockbackPower = 100.0f;
+	m_knockbackPower = 1000.0f;
 }
 
 bool UAttackComponent_Pushback::PerformAttack_Implementation(AActor* target, AActor* instigator)
@@ -24,13 +25,14 @@ bool UAttackComponent_Pushback::PerformAttack_Implementation(AActor* target, AAc
 		if (healthComp != nullptr)
 		{
 			healthComp->TakeDamage(player, m_damage, 0, enemy->GetController(), enemy);
-			UCapsuleComponent* mesh = Cast<UCapsuleComponent>(player->GetRootComponent());
-			if (mesh != nullptr)
+			UCharacterMovementComponent* moveComp = Cast<UCharacterMovementComponent>(player->GetMovementComponent());
+			if (moveComp != nullptr)
 			{
 				FVector dir = player->GetActorLocation() - enemy->GetActorLocation();
+				dir += FVector(0.0f,0.0f,m_knockbackHeight);
 				dir.Normalize();
 				dir *= m_knockbackPower;
-				mesh->AddImpulse(dir);
+				moveComp->AddImpulse(dir, true);
 				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, FString::Printf(TEXT("Push Attack!")));
 				return true;
 			}
