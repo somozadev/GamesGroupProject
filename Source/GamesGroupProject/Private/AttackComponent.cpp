@@ -39,3 +39,13 @@ bool UAttackComponent::PerformAttack_Implementation(AActor* target, AActor* inst
 	return false;
 }
 
+bool UAttackComponent::GetIsDelayed()
+{
+	return m_isDelayedAttack;
+}
+
+float UAttackComponent::GetDelayTime()
+{
+	return m_attackDelay;
+}
+

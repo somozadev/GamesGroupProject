@@ -26,6 +26,10 @@ protected:
 		float m_knockbackPower = 0.0f;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "AttackData")
 		float m_knockbackHeight = 100.0f;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "AttackData")
+		bool m_isDelayedAttack = false;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "AttackData")
+		float m_attackDelay = 1.0f;
 
 public:	
 	// Called every frame
@@ -35,5 +39,7 @@ public:
 		bool PerformAttack(AActor* target, AActor* instigator);
 	
 	virtual bool PerformAttack_Implementation(AActor* target, AActor* instigator);
-		
+
+	bool GetIsDelayed();
+	float GetDelayTime();
 };

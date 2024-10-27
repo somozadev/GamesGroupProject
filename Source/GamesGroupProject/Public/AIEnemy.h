@@ -44,6 +44,8 @@ protected:
 	int m_currentHealth;
 	bool m_isAlive = true;
 
+	FTimerHandle m_timerHandle;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

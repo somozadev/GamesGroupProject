@@ -58,11 +58,24 @@ void AAIEnemy::ConsiderAttack()
 	//Will do this in children rather than in base class. Base will just default to the first attack if it exists
 	if (m_attackComponents.Num() == 0)
 		return;
-	
-	if (m_attackComponents[0] != nullptr)
-    {
-    	m_attackComponents[0]->PerformAttack(m_playerCharacter, this);
-    }
+
+	int rng = rand() % m_attackComponents.Num();
+
+	if (m_attackComponents.IsValidIndex(rng))
+	{
+		if (m_attackComponents[rng] != nullptr)
+		{
+			if (m_attackComponents[rng]->GetIsDelayed())
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, FString::Printf(TEXT("Delayed Attack")));
+				GetWorld()->GetTimerManager().SetTimer(m_timerHandle, static_cast<float>(m_attackComponents[rng]->PerformAttack(m_playerCharacter, this)), false, m_attackComponents[rng]->GetDelayTime());
+			}
+			else
+			{
+				m_attackComponents[rng]->PerformAttack(m_playerCharacter, this);
+			}
+		}
+	}
 }
 
 //TO DO: Play animation and deal damage to player. Can be done once this branch is merged
