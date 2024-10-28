@@ -68,7 +68,8 @@ void AAIEnemy::ConsiderAttack()
 			if (m_attackComponents[rng]->GetIsDelayed())
 			{
 				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, FString::Printf(TEXT("Delayed Attack")));
-				GetWorld()->GetTimerManager().SetTimer(m_timerHandle, static_cast<float>(m_attackComponents[rng]->PerformAttack(m_playerCharacter, this)), false, m_attackComponents[rng]->GetDelayTime());
+				m_timerDelegate.BindUFunction(m_attackComponents[rng], "PerformAttack", m_playerCharacter, this);
+				//GetWorld()->GetTimerManager().SetTimer(m_timerHandle, m_timerDelegate, false, m_attackComponents[rng]->GetDelayTime());
 			}
 			else
 			{
@@ -135,6 +136,17 @@ void AAIEnemy::CalculateNearestPatrolPoint()
 		m_controller->GetBlackboard()->SetValueAsVector(TEXT("PatrolTarget"), m_patrolPoint4);
 		m_currentPatrolTarget = m_patrolPoint4;
 		m_nearestPatrolPoint = 4;
+	}
+}
+
+void AAIEnemy::PerformDelayedAttack(int index)
+{
+	if (m_attackComponents.IsValidIndex(index))
+	{
+		if (m_attackComponents[index] != nullptr)
+		{
+			m_attackComponents[index]->PerformAttack(m_playerCharacter, this)
+		}
 	}
 }
 

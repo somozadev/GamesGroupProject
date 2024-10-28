@@ -45,6 +45,7 @@ protected:
 	bool m_isAlive = true;
 
 	FTimerHandle m_timerHandle;
+	FTimerDelegate m_timerDelegate;
 
 protected:
 	// Called when the game starts or when spawned
@@ -56,6 +57,7 @@ protected:
 	void AttackB();
 	void AttackC();
 	void CalculateNearestPatrolPoint();
+	void PerformDelayedAttack(int index);
 
 public:	
 	// Called every frame
