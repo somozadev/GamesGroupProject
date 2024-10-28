@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "BehaviorTree/BehaviorTree.h"
+#include "AttackComponent.h"
 #include "AIEnemy.generated.h"
 
 UCLASS()
@@ -32,6 +33,7 @@ protected:
 	unsigned int m_nearestPatrolPoint = 1;
 	bool m_isInChaseRange = false;
 	FVector m_currentPatrolTarget;
+	TArray<UAttackComponent*> m_attackComponents;
 
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "EnemyStats")
@@ -41,6 +43,8 @@ protected:
 	AActor* m_playerCharacter;
 	int m_currentHealth;
 	bool m_isAlive = true;
+
+	FTimerHandle m_timerHandle;
 
 protected:
 	// Called when the game starts or when spawned
@@ -58,7 +62,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable)
-		bool TakeDamage(int damage);
+		bool TakeAttackDamage(int damage);
 
 	UFUNCTION(BlueprintCallable)
 		bool GetIsAlive();

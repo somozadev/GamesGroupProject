@@ -40,33 +40,41 @@ void AAIEnemy::BeginPlay()
 	m_currentPatrolTarget = m_patrolPoint1;
 	m_controller->GetBlackboard()->SetValueAsVector(TEXT("PatrolTarget"), m_patrolPoint1);
 	m_controller->GetBlackboard()->SetValueAsBool(TEXT("IsInChaseRange"), false);
+
+	TArray<UActorComponent*> components = GetComponentsByTag(UAttackComponent::StaticClass(), FName("AttackComp"));
+	for (int i = 0; i < components.Num(); i++)
+	{
+		UAttackComponent* attackComp = Cast<UAttackComponent>(components[i]);
+		if (attackComp)
+		{
+			m_attackComponents.Add(attackComp);
+		}
+	}
 }
 
 void AAIEnemy::ConsiderAttack()
 {
 	//TODO - Decision making for what attack to do. Will override in children
-	int rng = rand() % 10;
+	//Will do this in children rather than in base class. Base will just default to the first attack if it exists
+	if (m_attackComponents.Num() == 0)
+		return;
 
-	switch (rng)
+	int rng = rand() % m_attackComponents.Num();
+
+	if (m_attackComponents.IsValidIndex(rng))
 	{
-	case 0:
-	case 1:
-	case 2:
-	case 3:
-	case 4:
-		AttackA();
-		break;
-	case 5:
-	case 6:
-	case 7:
-		AttackB();
-		break;
-	case 8:
-	case 9:
-		AttackC();
-		break;
-	default:
-		break;
+		if (m_attackComponents[rng] != nullptr)
+		{
+			if (m_attackComponents[rng]->GetIsDelayed())
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, FString::Printf(TEXT("Delayed Attack")));
+				GetWorld()->GetTimerManager().SetTimer(m_timerHandle, static_cast<float>(m_attackComponents[rng]->PerformAttack(m_playerCharacter, this)), false, m_attackComponents[rng]->GetDelayTime());
+			}
+			else
+			{
+				m_attackComponents[rng]->PerformAttack(m_playerCharacter, this);
+			}
+		}
 	}
 }
 
@@ -197,7 +205,7 @@ void AAIEnemy::Tick(float DeltaTime)
 	}
 }
 
-bool AAIEnemy::TakeDamage(int damage)
+bool AAIEnemy::TakeAttackDamage(int damage)
 {
 	m_currentHealth -= damage;
 	//TO DO: Play death animation/deactivate if enemy dies
