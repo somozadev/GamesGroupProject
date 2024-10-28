@@ -39,6 +39,9 @@ protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "EnemyStats")
 		int m_maxHealth;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "EnemyStats")
+		float m_attackCooldown = 2.0f;
+
 	class ABaseAIEnemyController* m_controller;
 	AActor* m_playerCharacter;
 	int m_currentHealth;
@@ -46,6 +49,10 @@ protected:
 
 	FTimerHandle m_timerHandle;
 	FTimerDelegate m_timerDelegate;
+	float m_timeSinceLastAttack = 0.0f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		UStaticMeshComponent* m_warningMesh;
 
 protected:
 	// Called when the game starts or when spawned
@@ -57,7 +64,8 @@ protected:
 	void AttackB();
 	void AttackC();
 	void CalculateNearestPatrolPoint();
-	void PerformDelayedAttack(int index);
+	UFUNCTION()
+		void PerformDelayedAttack(int index);
 
 public:	
 	// Called every frame
