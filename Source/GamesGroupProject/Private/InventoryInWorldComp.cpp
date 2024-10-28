@@ -3,6 +3,7 @@
 
 #include "InventoryInWorldComp.h"
 
+#include "CardBaseLine.generated.h"
 
 // Sets default values
 AInventoryInWorldComp::AInventoryInWorldComp()
@@ -29,7 +30,12 @@ void AInventoryInWorldComp::BeginPlay()
 	//{
 		//FString s = NamedPoint;    
 		//UE_LOG(LogTemp, Warning, TEXT("%s"), *s);
-	//}
+	//}F
+	FString inventoryroll;//=a:
+	if(inventoryroll.Contains(TEXT("Test")))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Test card has worked"));
+	}
 }
 
 // Called every frame
