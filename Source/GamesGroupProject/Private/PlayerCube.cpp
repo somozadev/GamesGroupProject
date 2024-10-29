@@ -85,13 +85,25 @@ void APlayerCube::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 	//PlayerInputComponent->BindAxis("Jump",IE_Pressed,this, &ACharacter::Jump);
 	//PlayerInputComponent->BindAxis("Jump",IE_Released,this ,&ACharacter::StopJumping);
+
+	//To Do List
+
+	//Interact
+	//Cancel
+	//Card Select Left
+	//Card Select Right
+	//Hold Item
+	//Shoot
+	//Toggle Waypoint
 	
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &APlayerCube::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &APlayerCube::MoveRight);
 
+	// add input for looking up sightly.....
+
 	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
-	PlayerInputComponent->BindAxis("TurningRate", this, &APlayerCube::TurningRate);
+	//PlayerInputComponent->BindAxis("TurningRate", this, &APlayerCube::TurningRate);
 	
 
 }

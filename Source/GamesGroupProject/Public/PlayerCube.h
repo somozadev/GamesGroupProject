@@ -39,6 +39,7 @@ protected:
 
 	void MoveForward(float Value);
 	void MoveRight(float Value);
+	// to add look up 
 	void TurningRate(float Value);
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category= "Camera")
