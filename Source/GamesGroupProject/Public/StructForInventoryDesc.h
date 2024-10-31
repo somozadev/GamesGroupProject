@@ -1,17 +1,17 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
 #include "CoreMinimal.h"
+#include "StructForInventoryDesc.generated.h"
 
 /**
  * 
  */
-class GAMESGROUPPROJECT_API InventoryRowClass
-{
+
 /** Please add a struct description */
 USTRUCT(BlueprintType)
-struct FCardBaseLine
+struct FtempCardBaseLine
 {
 	GENERATED_BODY()
 public:
@@ -31,10 +31,3 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(DisplayName="Tags"))
 	FString Tags;
 };
-
-public:
-	InventoryRowClass();
-
-	~InventoryRowClass();
-};
-

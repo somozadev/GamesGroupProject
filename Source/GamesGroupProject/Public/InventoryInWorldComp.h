@@ -4,6 +4,7 @@
 #include "Engine/DataTable.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "StructForInventoryDesc.h"
 #include "InventoryInWorldComp.generated.h"
 
 UCLASS()
@@ -16,8 +17,8 @@ public:
 	AInventoryInWorldComp();
 	UPROPERTY(EditAnywhere)
 	UDataTable* InvCardPossible;
-	UPROPERTY(EditAnywhere)
-	UStruct* CardType;
+	//UPROPERTY(EditAnywhere)
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 

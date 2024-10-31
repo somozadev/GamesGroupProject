@@ -2,8 +2,8 @@
 
 
 #include "InventoryInWorldComp.h"
+#include "StructForInventoryDesc.h"
 
-#include "CardBaseLine.generated.h"
 
 // Sets default values
 AInventoryInWorldComp::AInventoryInWorldComp()
@@ -13,6 +13,7 @@ AInventoryInWorldComp::AInventoryInWorldComp()
 
 }
 
+
 // Called when the game starts or when spawned
 void AInventoryInWorldComp::BeginPlay()
 {
@@ -20,22 +21,32 @@ void AInventoryInWorldComp::BeginPlay()
 	
 	
 	
-	UE_LOG(LogTemp, Warning, TEXT("Inventory Activating"));
-//	FString s = InvCardPossible;
-	//TArray <struct CardBaseLine*> Outputingpoint;
-	//FString a;
-//	InvCardPossible->GetAllRows(a, Outputingpoint);
+
 	
-	//for (struct CardBaseLine* NamedPoint:Outputingpoint )
-	//{
-		//FString s = NamedPoint;    
-		//UE_LOG(LogTemp, Warning, TEXT("%s"), *s);
-	//}F
-	FString inventoryroll;//=a:
-	if(inventoryroll.Contains(TEXT("Test")))
+	UE_LOG(LogTemp, Warning, TEXT("Inventory Activating"));
+	
+//	FString s = InvCardPossible;
+	TArray <FtempCardBaseLine*> Outputingpoint;
+	FString a;
+	InvCardPossible->GetAllRows(a, Outputingpoint);
+	try
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Test card has worked"));
+		for (FtempCardBaseLine* NamedPoint:Outputingpoint )
+		{
+			FString s = NamedPoint->Name;    
+			UE_LOG(LogTemp, Warning, TEXT("%s"), *s);
+		}
+		//FString inventoryroll;//=a:
+		//if(inventoryroll.Contains(TEXT("Test")))
+		//{
+		//	UE_LOG(LogTemp, Warning, TEXT("Test card has worked"));
+		//}
 	}
+	catch (...)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Inventory Error"));
+	}
+	
 }
 
 // Called every frame
