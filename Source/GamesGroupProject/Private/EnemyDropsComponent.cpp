@@ -95,32 +95,38 @@ void UEnemyDropsComponent::SpawnItems(const FDropItems& Items)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Spawning %d Acorn(s)"), Items.Acorns);
 		// Add actual spawning logic here, e.g.:
-		// GetWorld()->SpawnActor<AAcorn>(AcornClass, Location, Rotation);
+		GetWorld()->SpawnActor<AInteractable>(acornBP, GetOwner()->GetActorTransform());
 	}
 	if (Items.Lava > 0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Spawning %d Lava Combat Card(s)"), Items.Lava);
 		// Add actual spawning logic here
+		GetWorld()->SpawnActor<AInteractable>(lavaBP, GetOwner()->GetActorTransform());
+
 	}
 	if (Items.Thunder > 0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Spawning %d Thunder Combat Card(s)"), Items.Thunder);
 		// Add actual spawning logic here
+		GetWorld()->SpawnActor<AInteractable>(thunderBP, GetOwner()->GetActorTransform());
 	}
 	if (Items.Toxin > 0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Spawning %d Toxin Combat Card(s)"), Items.Toxin);
 		// Add actual spawning logic here
+		GetWorld()->SpawnActor<AInteractable>(toxinBP, GetOwner()->GetActorTransform());
 	}
 	if (Items.Balance > 0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Spawning %d Balance Combat Card(s)"), Items.Balance);
 		// Add actual spawning logic here
+		GetWorld()->SpawnActor<AInteractable>(balanceBP, GetOwner()->GetActorTransform());
 	}
 	if (Items.Invincibility > 0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Spawning %d Invincibility Card(s)"), Items.Invincibility);
-		// Add actual spawning logic here
+		// Add actual spawning logic here  
+		GetWorld()->SpawnActor<AInteractable>(invincibilityBP, GetOwner()->GetActorTransform());
 	}
 	
 	UEventsManager::Get()->Invoke("OnItemsDropped");

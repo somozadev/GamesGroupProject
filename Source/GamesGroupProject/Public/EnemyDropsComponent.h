@@ -4,8 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Interactable.h"
 #include "EnemyDropsComponent.generated.h"
-
 
 UENUM(BlueprintType)
 enum class ECardDropType : uint8
@@ -90,6 +90,20 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Drops")
 	void Drop();
 	UEnemyDropsComponent();
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AInteractable> acornBP;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AInteractable> lavaBP;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AInteractable> thunderBP;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AInteractable> toxinBP;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AInteractable> balanceBP;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AInteractable> invincibilityBP;
+
 
 protected:
 	virtual void BeginPlay() override;
