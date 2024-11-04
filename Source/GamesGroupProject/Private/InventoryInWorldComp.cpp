@@ -110,6 +110,10 @@ bool AInventoryInWorldComp::UseCard(int ID)
 			{
 				pointer.Y=pointer.Y-1;
 				test=true;
+				if (pointer.Y < 0) {
+					test = false;
+					pointer.Y = 0;
+				}
 			}
 		}
 		return (test);
