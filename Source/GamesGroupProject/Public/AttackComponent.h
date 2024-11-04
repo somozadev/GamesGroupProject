@@ -30,6 +30,8 @@ protected:
 		bool m_isDelayedAttack = false;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "AttackData")
 		float m_attackDelay = 1.0f;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "AttackData")
+		float m_attackRadius = 100.0f;
 
 public:	
 	// Called every frame
@@ -42,4 +44,5 @@ public:
 
 	bool GetIsDelayed();
 	float GetDelayTime();
+	float GetAttackRadius();
 };
