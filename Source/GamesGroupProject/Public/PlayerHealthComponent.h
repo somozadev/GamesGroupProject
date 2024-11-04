@@ -16,14 +16,19 @@ public:
 	// Sets default values for this component's properties
 	UPlayerHealthComponent();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Health")
+	float DefaultBaseHealth;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Health")
-	float DefaultBaseHealth;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Health")
+	//float DefaultBaseHealth;
 
 UPROPERTY(BlueprintReadOnly)	
 	float Health;
+
+public:
 UFUNCTION()
 	void TakeDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
 		
