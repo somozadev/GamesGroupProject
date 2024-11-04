@@ -11,12 +11,14 @@ UCLASS()
 class GAMESGROUPPROJECT_API AInventoryInWorldComp : public AActor
 {
 	GENERATED_BODY()
-	
+	TArray <FtempCardBaseLine*> Outputingpoint;
 public:	
 	// Sets default values for this actor's properties
 	AInventoryInWorldComp();
 	UPROPERTY(EditAnywhere)
 	UDataTable* InvCardPossible;
+	TArray<FVector2D> InventoryActive={FVector2D::ZeroVector};
+
 	//UPROPERTY(EditAnywhere)
 
 	// Called when the game starts or when spawned
@@ -25,5 +27,7 @@ public:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	void AddCard(int ID);
+	bool UseCard(int ID);
 	
 };

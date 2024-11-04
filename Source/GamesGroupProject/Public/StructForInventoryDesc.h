@@ -11,7 +11,7 @@
 
 /** Please add a struct description */
 USTRUCT(BlueprintType)
-struct FtempCardBaseLine
+struct FtempCardBaseLine: public FTableRowBase
 {
 	GENERATED_BODY()
 public:
@@ -30,4 +30,19 @@ public:
 	/** Please add a variable description */
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(DisplayName="Tags"))
 	FString Tags;
+};
+USTRUCT(BlueprintType)
+struct FCardsTaken: public FTableRowBase
+{
+	GENERATED_BODY()
+public:
+	/** Please add a variable description */
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(DisplayName="ID", MakeStructureDefaultValue="0"))
+	int32 ID;
+	
+
+	/** Please add a variable description */
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(DisplayName="ID", MakeStructureDefaultValue="0"))
+	int32 Number;
+	
 };

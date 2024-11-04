@@ -26,7 +26,7 @@ void AInventoryInWorldComp::BeginPlay()
 	UE_LOG(LogTemp, Warning, TEXT("Inventory Activating"));
 	
 //	FString s = InvCardPossible;
-	TArray <FtempCardBaseLine*> Outputingpoint;
+	
 	FString a;
 	InvCardPossible->GetAllRows(a, Outputingpoint);
 	try
@@ -36,11 +36,11 @@ void AInventoryInWorldComp::BeginPlay()
 			FString s = NamedPoint->Name;    
 			UE_LOG(LogTemp, Warning, TEXT("%s"), *s);
 		}
-		//FString inventoryroll;//=a:
-		//if(inventoryroll.Contains(TEXT("Test")))
-		//{
-		//	UE_LOG(LogTemp, Warning, TEXT("Test card has worked"));
-		//}
+		FString inventoryroll;//=a:
+		if(inventoryroll.Contains(TEXT("Test")))
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Test card has worked"));
+		}
 	}
 	catch (...)
 	{
@@ -54,5 +54,65 @@ void AInventoryInWorldComp::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AInventoryInWorldComp::AddCard(int ID)
+{
+	int pickpoint=-1;
+	int index=0;
+	for (FtempCardBaseLine* NamedPoint:Outputingpoint )
+	{
+		int workingID = NamedPoint->ID;
+		if (workingID == ID)
+		{
+			pickpoint = index;
+		}
+		index ++;
+	}
+	if (pickpoint != -1)
+	{
+		bool test=false;
+		for (FVector2D pointer : InventoryActive)
+		{
+			if(pointer.X == ID)
+			{
+				pointer.Y=pointer.Y+1;
+				test=true;
+			}
+		}
+		InventoryActive.Add(FVector2D(ID,1));
+		return ;
+	}
+	else return;
+}
+
+bool AInventoryInWorldComp::UseCard(int ID)
+{
+	int pickpoint=-1;
+	int index=0;
+	for (FtempCardBaseLine* NamedPoint:Outputingpoint )
+	{
+		int workingID = NamedPoint->ID;
+		if (workingID == ID)
+		{
+			pickpoint = index;
+		}
+		index ++;
+	}
+	if (pickpoint == -1)
+	return (false);
+	else
+	{
+		bool test=false;
+		for (FVector2D pointer : InventoryActive)
+		{
+			if(pointer.X == ID)
+			{
+				pointer.Y=pointer.Y-1;
+				test=true;
+			}
+		}
+		return (test);
+	}
 }
 
