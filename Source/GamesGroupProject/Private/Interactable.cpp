@@ -29,15 +29,15 @@ void AInteractable::BeginPlay()
 
 	// These three lines are all it takes to create a new event and add it to the events class
 	//To invoke the event, you just need to call UEventsManager::Get()->Invoke("EventNameToInvoke") and that's about it 
-	FOnCustomEvent eventDelegate = FOnCustomEvent();
-	eventDelegate.AddDynamic(this, &AInteractable::ExampleEventUsage);
-	UEventsManager::Get()->EventMap.Add("OnPickedUp", eventDelegate);
+	FOnCustomEventOneParam eventDelegate = FOnCustomEventOneParam();
+	eventDelegate.AddDynamic(this, &AInteractable::ExampleEventUsageWithParam);
+    UEventsManager::Get()->EventMapOneParam.Add("OnPickedUpWithParam", eventDelegate);
 
 }
 
-void AInteractable::ExampleEventUsage()
+void AInteractable::ExampleEventUsageWithParam(FString param)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Event called and method invoked!"));
+    UE_LOG(LogTemp, Warning, TEXT("Event called with parameter: %s"), *param);
 }
 
 void AInteractable::PerformInteraction(AActor* interactorActor)
@@ -86,7 +86,7 @@ void AInteractable::HandlePickup(AActor* interactorActor)
 {
 	// give obj_id to player, need inventory and items ids table first for this
 	UE_LOG(LogTemp, Warning, TEXT("Object picked up!"));
-	UEventsManager::Get()->Invoke("OnPickedUp");
+	UEventsManager::Get()->Invoke("OnPickedUpWithParam", FString("Card_Id_Here")); 
 	Destroy();
 }
 

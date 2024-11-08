@@ -47,7 +47,7 @@ public:
 	float charmedSpeed = 600.0f; 
 
 	UFUNCTION()
-	void ExampleEventUsage();
+	void ExampleEventUsageWithParam(FString param);
 
 
 private:  //As this type of interactions are not 100% defined yet, this code will remain as so. Once it's done, better approach to virtualize HandleInteraction and each type, with it's own class, handles it's own interaction.
