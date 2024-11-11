@@ -6,6 +6,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "PlayerHealthComponent.h"
+#include "AttackComponent_MultiHit.h"
 
 #define AWARENESS_DISTANCE 500.0f
 
@@ -61,6 +62,9 @@ void AAIEnemy::ConsiderAttack()
 	//Will do this in children rather than in base class. Base will just default to the first attack if it exists
 
 	if (m_timeSinceLastAttack < m_attackCooldown)
+		return;
+
+	if (m_multihitTimer > 0.0f)
 		return;
 
 	if (GetWorld()->GetTimerManager().GetTimerRemaining(m_timerHandle) > 0.0f)
@@ -164,6 +168,13 @@ void AAIEnemy::PerformDelayedAttack(int index)
 		{
 			m_attackComponents[index]->PerformAttack(m_playerCharacter, this);
 			m_warningMesh->SetVisibility(false);
+			UAttackComponent_MultiHit* multiHit;
+			multiHit = Cast<UAttackComponent_MultiHit>(m_attackComponents[index]);
+
+			if (IsValid(multiHit))
+			{
+				m_multihitTimer = multiHit->GetCombinedDelayTimes();
+			}
 		}
 	}
 }
@@ -176,7 +187,13 @@ void AAIEnemy::Tick(float DeltaTime)
 	if (!m_isAlive)
 		return;
 
+	if (m_multihitTimer > 0.0f)
+		m_multihitTimer -= DeltaTime;
+
 	if (GetWorld()->GetTimerManager().GetTimerRemaining(m_timerHandle) > 0.0f)
+		return;
+
+	if (m_multihitTimer > 0.0f)
 		return;
 
 	if (!m_playerCharacter)

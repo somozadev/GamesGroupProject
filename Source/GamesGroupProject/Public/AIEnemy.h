@@ -50,6 +50,7 @@ protected:
 	FTimerHandle m_timerHandle;
 	FTimerDelegate m_timerDelegate;
 	float m_timeSinceLastAttack = 0.0f;
+	float m_multihitTimer = 0.0f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		UStaticMeshComponent* m_warningMesh;
