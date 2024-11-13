@@ -14,7 +14,10 @@ AAIEnemy::AAIEnemy()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
+	m_warningMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Warning Mesh"));
+	m_warningMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	m_warningMesh->SetVisibility(false);
+	m_warningMesh->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 }
 
 // Called when the game starts or when spawned
@@ -40,34 +43,57 @@ void AAIEnemy::BeginPlay()
 	m_currentPatrolTarget = m_patrolPoint1;
 	m_controller->GetBlackboard()->SetValueAsVector(TEXT("PatrolTarget"), m_patrolPoint1);
 	m_controller->GetBlackboard()->SetValueAsBool(TEXT("IsInChaseRange"), false);
+
+	TArray<UActorComponent*> components = GetComponentsByTag(UAttackComponent::StaticClass(), FName("AttackComp"));
+	for (int i = 0; i < components.Num(); i++)
+	{
+		UAttackComponent* attackComp = Cast<UAttackComponent>(components[i]);
+		if (attackComp)
+		{
+			m_attackComponents.Add(attackComp);
+		}
+	}
 }
 
 void AAIEnemy::ConsiderAttack()
 {
 	//TODO - Decision making for what attack to do. Will override in children
-	int rng = rand() % 10;
+	//Will do this in children rather than in base class. Base will just default to the first attack if it exists
 
-	switch (rng)
+	if (m_timeSinceLastAttack < m_attackCooldown)
+		return;
+
+	if (GetWorld()->GetTimerManager().GetTimerRemaining(m_timerHandle) > 0.0f)
+		return;
+
+	if (m_attackComponents.Num() == 0)
+		return;
+
+	int rng = rand() % m_attackComponents.Num();
+
+	if (m_attackComponents.IsValidIndex(rng))
 	{
-	case 0:
-	case 1:
-	case 2:
-	case 3:
-	case 4:
-		AttackA();
-		break;
-	case 5:
-	case 6:
-	case 7:
-		AttackB();
-		break;
-	case 8:
-	case 9:
-		AttackC();
-		break;
-	default:
-		break;
+		if (m_attackComponents[rng] != nullptr)
+		{
+			if (m_attackComponents[rng]->GetIsDelayed())
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, FString::Printf(TEXT("Delayed Attack")));
+				m_timerDelegate.BindUFunction(this, "PerformDelayedAttack", rng);
+				GetWorld()->GetTimerManager().SetTimer(m_timerHandle, m_timerDelegate, m_attackComponents[rng]->GetDelayTime(), false);
+				if (m_attackComponents[rng]->GetAttackRadius() > 0.0f)
+				{
+					m_warningMesh->SetVisibility(true);
+					m_warningMesh->SetWorldScale3D(FVector(m_attackComponents[rng]->GetAttackRadius() / 50.0f, m_attackComponents[rng]->GetAttackRadius() / 50.0f, 0.1f));
+				}
+			}
+			else
+			{
+				m_attackComponents[rng]->PerformAttack(m_playerCharacter, this);
+			}
+		}
 	}
+
+	m_timeSinceLastAttack = 0.0f;
 }
 
 //TO DO: Play animation and deal damage to player. Can be done once this branch is merged
@@ -130,6 +156,18 @@ void AAIEnemy::CalculateNearestPatrolPoint()
 	}
 }
 
+void AAIEnemy::PerformDelayedAttack(int index)
+{
+	if (m_attackComponents.IsValidIndex(index))
+	{
+		if (m_attackComponents[index] != nullptr)
+		{
+			m_attackComponents[index]->PerformAttack(m_playerCharacter, this);
+			m_warningMesh->SetVisibility(false);
+		}
+	}
+}
+
 // Called every frame
 void AAIEnemy::Tick(float DeltaTime)
 {
@@ -138,11 +176,16 @@ void AAIEnemy::Tick(float DeltaTime)
 	if (!m_isAlive)
 		return;
 
+	if (GetWorld()->GetTimerManager().GetTimerRemaining(m_timerHandle) > 0.0f)
+		return;
+
 	if (!m_playerCharacter)
 		m_playerCharacter = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
 
 	if (!m_playerCharacter)
 		return;
+
+	m_timeSinceLastAttack += DeltaTime;
 
 	//m_controller->GetBlackboard()->SetValueAsVector(TEXT("PatrolTarget"), m_patrolPoint1);
 
@@ -197,7 +240,7 @@ void AAIEnemy::Tick(float DeltaTime)
 	}
 }
 
-bool AAIEnemy::TakeDamage(int damage)
+bool AAIEnemy::TakeAttackDamage(int damage)
 {
 	m_currentHealth -= damage;
 	//TO DO: Play death animation/deactivate if enemy dies
