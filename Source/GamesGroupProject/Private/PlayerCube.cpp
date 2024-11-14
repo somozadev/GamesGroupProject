@@ -28,7 +28,7 @@ APlayerCube::APlayerCube()
 	PlayerMeshComponent->SetupAttachment(RootComponent);
 
 	DefaultTurningRate = 70.0f;
-	DefaultLookUpRate = 45.0f;
+	
 
 }	
 
@@ -66,66 +66,9 @@ void APlayerCube::MoveRight(float Value)
 	}
 }
 
-
-
-void APlayerCube::LookUpRate(float Value)
-{
-	AddControllerPitchInput(Value * DefaultLookUpRate * GetWorld()->GetDeltaSeconds());
-}
-
 void APlayerCube::TurningRate(float Value)
 {
 	AddControllerYawInput(Value * (float)DefaultTurningRate * GetWorld()->GetDeltaSeconds());
-}
-
-void APlayerCube::Interact()
-{
-	UE_LOG(LogTemp, Warning, TEXT("Interact input pressed"));
-}
-
-void APlayerCube::Cancel()
-{
-	UE_LOG(LogTemp, Warning, TEXT("Cancel input pressed"));
-}
-
-void APlayerCube::CardSelectLeft()
-{
-	UE_LOG(LogTemp, Warning, TEXT("Card Select left input pressed"));
-}
-
-void APlayerCube::CardSelectRight()
-{
-	UE_LOG(LogTemp, Warning, TEXT("Card Select Right input pressed"));
-}
-
-void APlayerCube::HoldItem()
-{
-	UE_LOG(LogTemp, Warning, TEXT("HoldItem input pressed"));
-}
-
-void APlayerCube::DropHeldItem()
-{
-	UE_LOG(LogTemp, Warning, TEXT("DropHoldItem input pressed"));
-}
-
-void APlayerCube::Shoot()
-{
-	UE_LOG(LogTemp, Warning, TEXT("Shoot input pressed"));
-}
-
-void APlayerCube::StopShooting()
-{
-	UE_LOG(LogTemp, Warning, TEXT("StopShooting input pressed"));
-}
-
-void APlayerCube::ToggleWaypoint()
-{
-	UE_LOG(LogTemp, Warning, TEXT("Waypoint input pressed"));
-}
-
-void APlayerCube::Pause()
-{
-	UE_LOG(LogTemp, Warning, TEXT("Pause input pressed"));
 }
 
 // Called every frame
@@ -140,35 +83,15 @@ void APlayerCube::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	// Action Bindings for input actions.
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
-	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
-
-	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &APlayerCube::Interact);
-	PlayerInputComponent->BindAction("Cancel", IE_Pressed, this, &APlayerCube::Cancel);
-	// Card switching
-	PlayerInputComponent->BindAction("CardSelectLeft", IE_Pressed, this, &APlayerCube::CardSelectLeft);
-	PlayerInputComponent->BindAction("CardSelectRight", IE_Pressed, this, &APlayerCube::CardSelectRight);
-	// Hold and drop items
-	PlayerInputComponent->BindAction("HoldItem", IE_Pressed, this, &APlayerCube::HoldItem);
-	PlayerInputComponent->BindAction("HoldItem" , IE_Released, this, &APlayerCube::DropHeldItem);
-	// Shoot and stop shooting
-	PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &APlayerCube::Shoot);
-	PlayerInputComponent->BindAction("Shoot", IE_Released, this, &APlayerCube::StopShooting);
+	//PlayerInputComponent->BindAxis("Jump",IE_Pressed,this, &ACharacter::Jump);
+	//PlayerInputComponent->BindAxis("Jump",IE_Released,this ,&ACharacter::StopJumping);
 	
-	//Toggle Waypoint
-	PlayerInputComponent->BindAction("ToggleWaypoint", IE_Pressed, this, &APlayerCube::ToggleWaypoint);
 
-	PlayerInputComponent->BindAction("Pause", IE_Pressed, this, &APlayerCube::Pause);
-	
-	// Axis bindings for movement functions
 	PlayerInputComponent->BindAxis("MoveForward", this, &APlayerCube::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &APlayerCube::MoveRight);
 
-	
-	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
-	//PlayerInputComponent->BindAxis("TurningRate", this, &APlayerCube::TurningRate);
+	PlayerInputComponent->BindAxis("TurningRate", this, &APlayerCube::TurningRate);
 	
 
 }

@@ -14,10 +14,7 @@ AAIEnemy::AAIEnemy()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	m_warningMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Warning Mesh"));
-	m_warningMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	m_warningMesh->SetVisibility(false);
-	m_warningMesh->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+
 }
 
 // Called when the game starts or when spawned
@@ -59,13 +56,6 @@ void AAIEnemy::ConsiderAttack()
 {
 	//TODO - Decision making for what attack to do. Will override in children
 	//Will do this in children rather than in base class. Base will just default to the first attack if it exists
-
-	if (m_timeSinceLastAttack < m_attackCooldown)
-		return;
-
-	if (GetWorld()->GetTimerManager().GetTimerRemaining(m_timerHandle) > 0.0f)
-		return;
-
 	if (m_attackComponents.Num() == 0)
 		return;
 
@@ -78,13 +68,7 @@ void AAIEnemy::ConsiderAttack()
 			if (m_attackComponents[rng]->GetIsDelayed())
 			{
 				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, FString::Printf(TEXT("Delayed Attack")));
-				m_timerDelegate.BindUFunction(this, "PerformDelayedAttack", rng);
-				GetWorld()->GetTimerManager().SetTimer(m_timerHandle, m_timerDelegate, m_attackComponents[rng]->GetDelayTime(), false);
-				if (m_attackComponents[rng]->GetAttackRadius() > 0.0f)
-				{
-					m_warningMesh->SetVisibility(true);
-					m_warningMesh->SetWorldScale3D(FVector(m_attackComponents[rng]->GetAttackRadius() / 50.0f, m_attackComponents[rng]->GetAttackRadius() / 50.0f, 0.1f));
-				}
+				GetWorld()->GetTimerManager().SetTimer(m_timerHandle, static_cast<float>(m_attackComponents[rng]->PerformAttack(m_playerCharacter, this)), false, m_attackComponents[rng]->GetDelayTime());
 			}
 			else
 			{
@@ -92,8 +76,6 @@ void AAIEnemy::ConsiderAttack()
 			}
 		}
 	}
-
-	m_timeSinceLastAttack = 0.0f;
 }
 
 //TO DO: Play animation and deal damage to player. Can be done once this branch is merged
@@ -156,18 +138,6 @@ void AAIEnemy::CalculateNearestPatrolPoint()
 	}
 }
 
-void AAIEnemy::PerformDelayedAttack(int index)
-{
-	if (m_attackComponents.IsValidIndex(index))
-	{
-		if (m_attackComponents[index] != nullptr)
-		{
-			m_attackComponents[index]->PerformAttack(m_playerCharacter, this);
-			m_warningMesh->SetVisibility(false);
-		}
-	}
-}
-
 // Called every frame
 void AAIEnemy::Tick(float DeltaTime)
 {
@@ -176,16 +146,11 @@ void AAIEnemy::Tick(float DeltaTime)
 	if (!m_isAlive)
 		return;
 
-	if (GetWorld()->GetTimerManager().GetTimerRemaining(m_timerHandle) > 0.0f)
-		return;
-
 	if (!m_playerCharacter)
 		m_playerCharacter = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
 
 	if (!m_playerCharacter)
 		return;
-
-	m_timeSinceLastAttack += DeltaTime;
 
 	//m_controller->GetBlackboard()->SetValueAsVector(TEXT("PatrolTarget"), m_patrolPoint1);
 

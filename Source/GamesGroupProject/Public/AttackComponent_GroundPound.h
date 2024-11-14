@@ -14,7 +14,10 @@ class GAMESGROUPPROJECT_API UAttackComponent_GroundPound : public UAttackCompone
 {
 	GENERATED_BODY()
 protected:
-	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "AttackData")
+		float m_slamRadius = 100.0f;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "AttackData")
+		float m_slamDelay = 1.0f;
 public:
 	bool PerformAttack_Implementation(AActor* target, AActor* instigator) override;
 };
