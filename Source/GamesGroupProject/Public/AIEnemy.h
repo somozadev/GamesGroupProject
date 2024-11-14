@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "BehaviorTree/BehaviorTree.h"
+#include "AttackComponent.h"
 #include "AIEnemy.generated.h"
 
 UCLASS()
@@ -32,15 +33,26 @@ protected:
 	unsigned int m_nearestPatrolPoint = 1;
 	bool m_isInChaseRange = false;
 	FVector m_currentPatrolTarget;
+	TArray<UAttackComponent*> m_attackComponents;
 
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "EnemyStats")
 		int m_maxHealth;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "EnemyStats")
+		float m_attackCooldown = 2.0f;
+
 	class ABaseAIEnemyController* m_controller;
 	AActor* m_playerCharacter;
 	int m_currentHealth;
 	bool m_isAlive = true;
+
+	FTimerHandle m_timerHandle;
+	FTimerDelegate m_timerDelegate;
+	float m_timeSinceLastAttack = 0.0f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		UStaticMeshComponent* m_warningMesh;
 
 protected:
 	// Called when the game starts or when spawned
@@ -52,13 +64,15 @@ protected:
 	void AttackB();
 	void AttackC();
 	void CalculateNearestPatrolPoint();
+	UFUNCTION()
+		void PerformDelayedAttack(int index);
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable)
-		bool TakeDamage(int damage);
+		bool TakeAttackDamage(int damage);
 
 	UFUNCTION(BlueprintCallable)
 		bool GetIsAlive();
