@@ -39,11 +39,25 @@ protected:
 
 	void MoveForward(float Value);
 	void MoveRight(float Value);
-	// to add look up 
+	void LookUpRate(float Value);
 	void TurningRate(float Value);
+
+	void Interact();
+	void Cancel();
+	void CardSelectLeft();
+	void CardSelectRight();
+	void HoldItem();
+	void DropHeldItem();
+	void Shoot();
+	void StopShooting();
+	void ToggleWaypoint();
+	void Pause();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category= "Camera")
 	float DefaultTurningRate;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category= "Camera")
+	float DefaultLookUpRate;
 
 public:	
 	// Called every frame
