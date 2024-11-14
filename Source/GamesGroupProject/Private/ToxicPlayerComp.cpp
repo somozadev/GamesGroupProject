@@ -26,7 +26,7 @@ void UToxicPlayerComp::BeginPlay()
 	pointto = GetWorld()->GetFirstPlayerController()->GetPawn();
 	// ...
 }
-void ActivateToxin()
+void UToxicPlayerComp::ActivateToxin()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Toxic Start"));
 	TArray<float>Dists=TArray<float>();
@@ -38,16 +38,16 @@ void ActivateToxin()
 		Dists.Add(dist);
 		UE_LOG(LogTemp, Warning, TEXT(" Checked for distance %f"),dist);
 	}
-	while (NumberOfTargets > 0)
-	{
-		float distmin=0;
-		for (int i = 0; i < Dists.Num(); i++) {
-			if (Dists[i]<distmin) {
-				
-			}
-		}
-	
-	}
+	// while (NumberOfTargets > 0)
+	// {
+	// 	float distmin=0;
+	// 	for (int i = 0; i < Dists.Num(); i++) {
+	// 		if (Dists[i]<distmin) {
+	// 			
+	// 		}
+	// 	}
+	//
+	// }
 }
 	// Called every frame
 	void UToxicPlayerComp::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
