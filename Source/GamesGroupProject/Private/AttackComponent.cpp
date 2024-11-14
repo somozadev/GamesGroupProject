@@ -49,3 +49,8 @@ float UAttackComponent::GetDelayTime()
 	return m_attackDelay;
 }
 
+float UAttackComponent::GetAttackRadius()
+{
+	return m_attackRadius;
+}
+
