@@ -39,6 +39,11 @@ bool UAttackComponent_MultiHit::PerformAttack_Implementation(AActor* target, AAc
 				}
 			}
 		}
+		else
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, FString::Printf(TEXT("Miss!")));
+			return true;
+		}
 	}
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, FString::Printf(TEXT("Something went wrong!")));
 	return false;
@@ -59,6 +64,7 @@ void UAttackComponent_MultiHit::TickComponent(float DeltaTime, ELevelTick TickTy
 		{
 			if (m_currentAttackTime >= m_multiAttackTimings[m_attackPhase])
 			{
+				m_currentAttackTime = 0.0f;
 				FVector dir = m_player->GetActorLocation() - m_enemy->GetActorLocation();
 
 				if (dir.Length() <= m_multiAttackRadius[m_attackPhase])
@@ -86,6 +92,17 @@ void UAttackComponent_MultiHit::TickComponent(float DeltaTime, ELevelTick TickTy
 						}
 					}
 				}
+				else
+				{
+					GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, FString::Printf(TEXT("Miss!")));
+					m_attackPhase++;
+
+					if (m_attackPhase >= m_multiAttackTimings.Num())
+					{
+						GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, FString::Printf(TEXT("Attack Over!")));
+						m_isAttacking = false;
+					}
+				}
 			}
 		}
 		else
@@ -106,4 +123,12 @@ float UAttackComponent_MultiHit::GetCombinedDelayTimes()
 	}
 
 	return total;
+}
+
+float UAttackComponent_MultiHit::GetCurrentRadius()
+{
+	if (m_multiAttackRadius.IsValidIndex(m_attackPhase))
+		return m_multiAttackRadius[m_attackPhase];
+	else
+		return 0.0f;
 }

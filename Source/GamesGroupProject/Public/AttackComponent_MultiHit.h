@@ -41,4 +41,5 @@ public:
 	bool PerformAttack_Implementation(AActor* target, AActor* instigator) override;
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	float GetCombinedDelayTimes();
+	float GetCurrentRadius();
 };
