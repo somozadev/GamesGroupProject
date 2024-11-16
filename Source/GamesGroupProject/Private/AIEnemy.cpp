@@ -61,6 +61,9 @@ void AAIEnemy::ConsiderAttack()
 	//TODO - Decision making for what attack to do. Will override in children
 	//Will do this in children rather than in base class. Base will just default to the first attack if it exists
 
+	if (!m_isAlive)
+		return;
+	
 	if (m_timeSinceLastAttack < m_attackCooldown)
 		return;
 
@@ -266,6 +269,18 @@ void AAIEnemy::Tick(float DeltaTime)
 bool AAIEnemy::TakeAttackDamage(int damage)
 {
 	m_currentHealth -= damage;
+
+	if (m_currentHealth <= 0)
+	{
+		m_isAlive = false;
+		m_controller->BrainComponent->StopLogic(FString("Enemy Dead"));
+		PrimaryActorTick.bCanEverTick = false;
+		m_warningMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		m_warningMesh->SetVisibility(false);
+		SetActorEnableCollision(false);
+		GetMesh()->SetVisibility(false);
+	}
+		
 	//TO DO: Play death animation/deactivate if enemy dies
 	return m_currentHealth <= 0;
 }
