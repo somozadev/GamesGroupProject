@@ -1,11 +1,12 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "PlayerCube.h"
+#include "Components/SphereComponent.h"
+#include "AIEnemy.h"
 #include "LavaAttackComponent.generated.h"
+
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class GAMESGROUPPROJECT_API ULavaAttackComponent : public UActorComponent
@@ -17,30 +18,52 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
-	void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction);
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
+	                           FActorComponentTickFunction* ThisTickFunction) override;
 
-	UPROPERTY(VisibleAnywhere, Category = "Aiming")
+	UFUNCTION()
+	void OnEnemyEnterRange(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+	                       int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+	void OnEnemyExitRange(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+	                      int32 OtherBodyIndex);
+
+	UPROPERTY(VisibleAnywhere, Category = "Lava Attack")
 	bool bIsAiming;
 
-	UPROPERTY(VisibleAnywhere, Category = "Aiming")
+	UPROPERTY(VisibleAnywhere, Category = "Lava Attack")
 	FVector TargetLocation;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Aiming")
-	TSubclassOf<AActor> TargetActorClass;
+	UPROPERTY(EditDefaultsOnly, Category = "Lava Attack")
+	TSubclassOf<AActor> SplashObject;
 
-	UPROPERTY()
-	AActor* TargetObject;
-	
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = "Lava Attack")
+	AActor* SplashSpawnedObject;
+
+	UPROPERTY(VisibleAnywhere, Category = "Lava Attack")
+	TArray<AAIEnemy*> TargetEnemiesInRange;
+
+	UPROPERTY(VisibleAnywhere, Category = "Lava Attack")
+	AAIEnemy* TargetEnemy;
+
+	UPROPERTY(VisibleAnywhere, Category = "Lava Attack")
 	APlayerCube* PlayerCube;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Aiming")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Lava Attack")
 	float AimRadius;
+
+	UPROPERTY(VisibleAnywhere, Category = "Lava Attack")
+	USphereComponent* DetectionSphere;
+
+	int32 CurrentTargetIndex;
 
 public:
 	void StartAiming();
 	void StopAiming();
-	void UpdateTargetLocation(const FVector& NewLocation) const;
+	void UseAttack();
 	void CreateTargetObject();
-	void MoveTargetObject(const FVector& Direction) const;
+	void MoveLeft();
+	void MoveRight();
+	void SetCurrentTarget();
 };

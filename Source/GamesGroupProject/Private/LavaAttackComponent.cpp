@@ -1,66 +1,120 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #include "LavaAttackComponent.h"
 #include "DrawDebugHelpers.h"
 #include "PlayerCube.h"
 #include "Engine/World.h"
-
+#include "AIEnemy.h"
+#include "EventsManager.h"
+#include "Components/SphereComponent.h"
 
 ULavaAttackComponent::ULavaAttackComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 	bIsAiming = false;
-	TargetLocation = FVector::ZeroVector;
+	CurrentTargetIndex = -1;
+	AimRadius = 1000.0f;
+
+	// Defer attaching to avoid null root component
+	DetectionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("DetectionSphere"));
+	DetectionSphere->InitSphereRadius(AimRadius);
+	DetectionSphere->SetCollisionProfileName(TEXT("OverlapAllDynamic"));
+	DetectionSphere->OnComponentBeginOverlap.AddDynamic(this, &ULavaAttackComponent::OnEnemyEnterRange);
+	DetectionSphere->OnComponentEndOverlap.AddDynamic(this, &ULavaAttackComponent::OnEnemyExitRange);
 }
 
 void ULavaAttackComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	PlayerCube = Cast<APlayerCube>(GetOwner());
+	if (PlayerCube)
+	{
+		DetectionSphere->SetupAttachment(PlayerCube->GetRootComponent());
+	}
 }
 
-void ULavaAttackComponent::TickComponent(float DeltaTime, ELevelTick TickType,
-                                         FActorComponentTickFunction* ThisTickFunction)
+void ULavaAttackComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
 
-
-void ULavaAttackComponent::StartAiming()
+void ULavaAttackComponent::StartAiming() //called on LavaCard selected 
 {
 	bIsAiming = true;
-	CreateTargetObject();
+	SetCurrentTarget();
+	
 }
 
 void ULavaAttackComponent::StopAiming()
 {
 	bIsAiming = false;
-	if (TargetObject)
-	{
-		TargetObject->Destroy();
-		TargetObject = nullptr;
-	}
-}
-void ULavaAttackComponent::CreateTargetObject()
-{
-	if (PlayerCube && TargetActorClass)
-	{
-		const FVector SpawnLocation = PlayerCube->GetActorLocation() + FVector(0, AimRadius, 0);
-		const FActorSpawnParameters SpawnParams;
-		TargetObject = PlayerCube->GetWorld()->SpawnActor<AActor>(TargetActorClass, SpawnLocation, FRotator::ZeroRotator, SpawnParams);
-	}
-}
-void ULavaAttackComponent::UpdateTargetLocation(const FVector& NewLocation) const
-{
-	if (TargetObject)
-		TargetObject->SetActorLocation(NewLocation);
+	TargetEnemy = nullptr;
+	TargetEnemiesInRange.Empty();
+	CurrentTargetIndex = -1;
 }
 
-void ULavaAttackComponent::MoveTargetObject(const FVector& Direction) const
+void ULavaAttackComponent::UseAttack() //called on shoot after lavacard selected
 {
-	if (TargetObject)
+	CreateTargetObject();
+	StopAiming();
+}
+
+void ULavaAttackComponent::CreateTargetObject()
+{
+	if (PlayerCube && TargetEnemy && SplashObject)
 	{
-		FVector NewLocation = TargetObject->GetActorLocation() + Direction;
-		UpdateTargetLocation(NewLocation);
+		FVector pos = TargetEnemy->GetActorLocation();
+		const FVector SpawnLocation = FVector(pos.X, pos.Y, 0);
+		const FActorSpawnParameters SpawnParams;
+		SplashSpawnedObject = GetWorld()->SpawnActor<AActor>(SplashObject, SpawnLocation, FRotator::ZeroRotator, SpawnParams);
+	}
+}
+
+void ULavaAttackComponent::SetCurrentTarget()
+{
+	if (TargetEnemiesInRange.Num() > 0)
+	{
+		if (CurrentTargetIndex == -1 || CurrentTargetIndex >= TargetEnemiesInRange.Num())
+		{
+			CurrentTargetIndex = 0;
+		}
+		TargetEnemy = TargetEnemiesInRange[CurrentTargetIndex];
+	}
+	else
+	{
+		CurrentTargetIndex = -1;
+		TargetEnemy = nullptr;
+	}
+}
+
+void ULavaAttackComponent::MoveLeft() //should be called on player inputs left on right trigger
+{
+	if (TargetEnemiesInRange.Num() > 0)
+	{
+		CurrentTargetIndex = (CurrentTargetIndex - 1 + TargetEnemiesInRange.Num()) % TargetEnemiesInRange.Num();
+		SetCurrentTarget();
+	}
+}
+
+void ULavaAttackComponent::MoveRight() //should be called on player inputs right on right trigger
+{
+	if (TargetEnemiesInRange.Num() > 0)
+	{
+		CurrentTargetIndex = (CurrentTargetIndex + 1) % TargetEnemiesInRange.Num();
+		SetCurrentTarget();
+	}
+}
+
+void ULavaAttackComponent::OnEnemyEnterRange(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (AAIEnemy* Enemy = Cast<AAIEnemy>(OtherActor))
+	{
+		TargetEnemiesInRange.Add(Enemy);
+	}
+}
+
+void ULavaAttackComponent::OnEnemyExitRange(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	if (AAIEnemy* Enemy = Cast<AAIEnemy>(OtherActor))
+	{
+		TargetEnemiesInRange.Remove(Enemy);
 	}
 }
