@@ -6,6 +6,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "PlayerHealthComponent.h"
+#include "AttackComponent_MultiHit.h"
 
 #define AWARENESS_DISTANCE 500.0f
 
@@ -63,6 +64,9 @@ void AAIEnemy::ConsiderAttack()
 	if (m_timeSinceLastAttack < m_attackCooldown)
 		return;
 
+	if (m_multihitTimer > 0.0f)
+		return;
+
 	if (GetWorld()->GetTimerManager().GetTimerRemaining(m_timerHandle) > 0.0f)
 		return;
 
@@ -84,6 +88,14 @@ void AAIEnemy::ConsiderAttack()
 				{
 					m_warningMesh->SetVisibility(true);
 					m_warningMesh->SetWorldScale3D(FVector(m_attackComponents[rng]->GetAttackRadius() / 50.0f, m_attackComponents[rng]->GetAttackRadius() / 50.0f, 0.1f));
+
+					UAttackComponent_MultiHit* multiHit = Cast<UAttackComponent_MultiHit>(m_attackComponents[rng]);
+
+					if (IsValid(multiHit))
+					{
+						m_multihitTimer = multiHit->GetCombinedDelayTimes();
+						m_currentMultiIndex = rng;
+					}
 				}
 			}
 			else
@@ -94,32 +106,6 @@ void AAIEnemy::ConsiderAttack()
 	}
 
 	m_timeSinceLastAttack = 0.0f;
-}
-
-//TO DO: Play animation and deal damage to player. Can be done once this branch is merged
-void AAIEnemy::AttackA()
-{
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, FString::Printf(TEXT("I just did attack A")));
-	UPlayerHealthComponent* healthComp = m_playerCharacter->GetComponentByClass<UPlayerHealthComponent>();
-
-	if (healthComp)
-	{
-		//Damage call here
-	}
-	else
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, FString::Printf(TEXT("Failed to fetch health component")));
-	}
-}
-
-void AAIEnemy::AttackB()
-{
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, FString::Printf(TEXT("I just did attack B")));
-}
-
-void AAIEnemy::AttackC()
-{
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, FString::Printf(TEXT("I just did attack C")));
 }
 
 void AAIEnemy::CalculateNearestPatrolPoint()
@@ -164,6 +150,26 @@ void AAIEnemy::PerformDelayedAttack(int index)
 		{
 			m_attackComponents[index]->PerformAttack(m_playerCharacter, this);
 			m_warningMesh->SetVisibility(false);
+			UAttackComponent_MultiHit* multiHit = Cast<UAttackComponent_MultiHit>(m_attackComponents[index]);
+
+			if (IsValid(multiHit))
+			{
+				m_multihitTimer = multiHit->GetCombinedDelayTimes();
+				m_currentMultiIndex = index;
+			}
+		}
+	}
+}
+
+void AAIEnemy::UpdateMultiHitWarning()
+{
+	if (IsValid(m_warningMesh) && m_attackComponents.IsValidIndex(m_currentMultiIndex))
+	{
+		UAttackComponent_MultiHit* multiHit = Cast<UAttackComponent_MultiHit>(m_attackComponents[m_currentMultiIndex]);
+		if (IsValid(multiHit))
+		{
+			m_warningMesh->SetVisibility(true);
+			m_warningMesh->SetWorldScale3D(FVector(multiHit->GetCurrentRadius() / 50.0f, multiHit->GetCurrentRadius() / 50.0f, 0.1f));
 		}
 	}
 }
@@ -176,8 +182,25 @@ void AAIEnemy::Tick(float DeltaTime)
 	if (!m_isAlive)
 		return;
 
+	if (m_multihitTimer > 0.0f)
+	{
+		m_multihitTimer -= DeltaTime;
+		//Hides the warning symbol after last mulkti hit
+		if (m_multihitTimer <= 0.0f)
+		{
+			m_warningMesh->SetVisibility(false);
+		}
+	}
+		
+
 	if (GetWorld()->GetTimerManager().GetTimerRemaining(m_timerHandle) > 0.0f)
 		return;
+
+	if (m_multihitTimer > 0.0f)
+	{
+		UpdateMultiHitWarning();
+		return;
+	}
 
 	if (!m_playerCharacter)
 		m_playerCharacter = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
@@ -250,6 +273,16 @@ bool AAIEnemy::TakeAttackDamage(int damage)
 bool AAIEnemy::GetIsAlive()
 {
 	return m_isAlive;
+}
+
+float AAIEnemy::GetCurrentHealth()
+{
+	return m_currentHealth;
+}
+
+float AAIEnemy::GetMaxHealth()
+{
+	return m_maxHealth;
 }
 
 // Called to bind functionality to input
