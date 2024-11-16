@@ -38,16 +38,36 @@ void UToxicPlayerComp::ActivateToxin()
 		Dists.Add(dist);
 		UE_LOG(LogTemp, Warning, TEXT(" Checked for distance %f"),dist);
 	}
-	// while (NumberOfTargets > 0)
-	// {
-	// 	float distmin=0;
-	// 	for (int i = 0; i < Dists.Num(); i++) {
-	// 		if (Dists[i]<distmin) {
-	// 			
-	// 		}
-	// 	}
-	//
-	// }
+	if(FoundActors.Num()>3)
+	{
+		TArray<AActor*> RealTargets;
+		while (NumberOfTargets > 0)
+		{
+			int pingpoint=0;
+			float distmin=0;
+			for (int i = 0; i < Dists.Num(); i++) {
+				if (Dists[i]<distmin) {
+					distmin=Dists[i];
+					pingpoint=i;
+				}
+			}
+			Dists.RemoveAt(pingpoint);
+			RealTargets.Add(FoundActors[pingpoint]);
+			FoundActors.RemoveAt(pingpoint);
+			NumberOfTargets--;
+	
+		}
+		
+		
+		for (AActor* Actor : RealTargets)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("TargetDeclared"));
+			FVector Location(0.0f, 0.0f, 0.0f);
+			FRotator Rotation(0.0f, 0.0f, 0.0f);
+			FActorSpawnParameters SpawnInfo;
+			//GetWorld()->SpawnActor(ProjectileClass);
+		}
+	}
 }
 	// Called every frame
 	void UToxicPlayerComp::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)

@@ -17,6 +17,8 @@ public:
 	UToxicPlayerComp();
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Attributes);
 	UClass* TargetClass;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UObject* ProjectileClass;
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
