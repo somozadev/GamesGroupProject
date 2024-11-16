@@ -50,6 +50,8 @@ protected:
 	FTimerHandle m_timerHandle;
 	FTimerDelegate m_timerDelegate;
 	float m_timeSinceLastAttack = 0.0f;
+	float m_multihitTimer = 0.0f;
+	int m_currentMultiIndex;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		UStaticMeshComponent* m_warningMesh;
@@ -59,13 +61,12 @@ protected:
 	virtual void BeginPlay() override;
 
 	virtual void ConsiderAttack();
-
-	void AttackA();
-	void AttackB();
-	void AttackC();
+	
 	void CalculateNearestPatrolPoint();
 	UFUNCTION()
 		void PerformDelayedAttack(int index);
+
+	void UpdateMultiHitWarning();
 
 public:	
 	// Called every frame
@@ -76,6 +77,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		bool GetIsAlive();
+	
+	UFUNCTION(BlueprintCallable)
+		float GetCurrentHealth();
+
+	UFUNCTION(BlueprintCallable)
+		float GetMaxHealth();
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
