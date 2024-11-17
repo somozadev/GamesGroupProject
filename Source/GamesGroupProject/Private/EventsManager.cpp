@@ -48,30 +48,30 @@ void UEventsManager::Invoke(FName eventName)
 	}
 }
 
-void UEventsManager::Subscribe(FName eventName, FOnCustomEventOneParam::FDelegate& delegateEvent)
+void UEventsManager::Subscribe(FName eventName, FOnCustomEventOneParamString::FDelegate& delegateEvent)
 {
-	if (!EventMapOneParam.Contains(eventName))
+	if (!EventMapOneParamString.Contains(eventName))
 	{
-		EventMapOneParam.Add(eventName, FOnCustomEventOneParam());
+		EventMapOneParamString.Add(eventName, FOnCustomEventOneParamString());
 	}
 
 	UE_LOG(LogTemp, Warning, TEXT("EventsManager Subscribe Called"));
-	EventMapOneParam[eventName].Add(delegateEvent);
+	EventMapOneParamString[eventName].Add(delegateEvent);
 }
 
-void UEventsManager::Unsubscribe(FName EventName, FOnCustomEventOneParam::FDelegate& delegateEvent)
+void UEventsManager::Unsubscribe(FName EventName, FOnCustomEventOneParamString::FDelegate& delegateEvent)
 {
-	if (EventMapOneParam.Contains(EventName))
+	if (EventMapOneParamString.Contains(EventName))
 	{
-		EventMapOneParam[EventName].Remove(delegateEvent);
+		EventMapOneParamString[EventName].Remove(delegateEvent);
 	}
 }
 
 void UEventsManager::Invoke(FName eventName, FString param)
 {
-	if (EventMapOneParam.Contains(eventName))
+	if (EventMapOneParamString.Contains(eventName))
 	{
-		EventMapOneParam[eventName].Broadcast(param);
+		EventMapOneParamString[eventName].Broadcast(param);
 		UE_LOG(LogTemp, Warning, TEXT("Event %s invoked with param1: %s"), *eventName.ToString(), *param);
 	}
 	else
@@ -79,3 +79,68 @@ void UEventsManager::Invoke(FName eventName, FString param)
 		UE_LOG(LogTemp, Warning, TEXT("Event %s not found."), *eventName.ToString());
 	}
 }
+
+void UEventsManager::Subscribe(FName eventName, FOnCustomEventOneParamInt::FDelegate& delegateEvent)
+{
+	if (!EventMapOneParamInt.Contains(eventName))
+	{
+		EventMapOneParamInt.Add(eventName, FOnCustomEventOneParamInt());
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("EventsManager Subscribe Called"));
+	EventMapOneParamInt[eventName].Add(delegateEvent);
+}
+
+void UEventsManager::Unsubscribe(FName EventName, FOnCustomEventOneParamInt::FDelegate& delegateEvent)
+{
+	if (EventMapOneParamInt.Contains(EventName))
+	{
+		EventMapOneParamInt[EventName].Remove(delegateEvent);
+	}
+}
+
+void UEventsManager::Invoke(FName eventName, int param)
+{
+	if (EventMapOneParamInt.Contains(eventName))
+	{
+		EventMapOneParamInt[eventName].Broadcast(param);
+		UE_LOG(LogTemp, Warning, TEXT("Event %s invoked with param1: %d"), *eventName.ToString(), param);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Event %s not found."), *eventName.ToString());
+	}
+}
+
+void UEventsManager::Subscribe(FName eventName, FOnCustomEventOneParamIntInt::FDelegate& delegateEvent)
+{
+	if (!EventMapOneParamIntInt.Contains(eventName))
+	{
+		EventMapOneParamIntInt.Add(eventName, FOnCustomEventOneParamIntInt());
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("EventsManager Subscribe Called"));
+	EventMapOneParamIntInt[eventName].Add(delegateEvent);
+}
+
+void UEventsManager::Unsubscribe(FName EventName, FOnCustomEventOneParamIntInt::FDelegate& delegateEvent)
+{
+	if (EventMapOneParamIntInt.Contains(EventName))
+	{
+		EventMapOneParamIntInt[EventName].Remove(delegateEvent);
+	}
+}
+
+void UEventsManager::Invoke(FName eventName, int param1, int param2)
+{
+	if (EventMapOneParamIntInt.Contains(eventName))
+	{
+		EventMapOneParamIntInt[eventName].Broadcast(param1,param2);
+		UE_LOG(LogTemp, Warning, TEXT("Event %s invoked with param1: %d and param2: %d"), *eventName.ToString(), param1,param2);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Event %s not found."), *eventName.ToString());
+	}
+}
+

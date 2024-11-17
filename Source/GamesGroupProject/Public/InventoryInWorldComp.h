@@ -17,6 +17,7 @@ public:
 	AInventoryInWorldComp();
 	UPROPERTY(EditAnywhere)
 	UDataTable* InvCardPossible;
+	UPROPERTY(VisibleAnywhere)
 	TArray<FVector2D> InventoryActive={FVector2D::ZeroVector};
 
 	//UPROPERTY(EditAnywhere)
@@ -27,6 +28,7 @@ public:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	UFUNCTION() //requires to has UFUNCTION() for the eventsmanager 
 	void AddCard(int ID);
 	bool UseCard(int ID);
 	
