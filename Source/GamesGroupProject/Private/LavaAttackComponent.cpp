@@ -17,9 +17,12 @@ ULavaAttackComponent::ULavaAttackComponent()
 	DetectionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("DetectionSphere"));
 	DetectionSphere->InitSphereRadius(AimRadius);
 	DetectionSphere->SetCollisionProfileName(TEXT("OverlapAllDynamic"));
+	DetectionSphere->SetLineThickness(1);
 	DetectionSphere->OnComponentBeginOverlap.AddDynamic(this, &ULavaAttackComponent::OnEnemyEnterRange);
 	DetectionSphere->OnComponentEndOverlap.AddDynamic(this, &ULavaAttackComponent::OnEnemyExitRange);
+
 }
+
 
 void ULavaAttackComponent::BeginPlay()
 {
@@ -27,7 +30,8 @@ void ULavaAttackComponent::BeginPlay()
 	PlayerCube = Cast<APlayerCube>(GetOwner());
 	if (PlayerCube)
 	{
-		DetectionSphere->SetupAttachment(PlayerCube->GetRootComponent());
+        DetectionSphere->AttachToComponent(PlayerCube->GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
+		DetectionSphere->SetRelativeLocation(FVector::ZeroVector);
 	}
 }
 
@@ -47,7 +51,7 @@ void ULavaAttackComponent::StopAiming()
 {
 	bIsAiming = false;
 	TargetEnemy = nullptr;
-	TargetEnemiesInRange.Empty();
+	// TargetEnemiesInRange.Empty();
 	CurrentTargetIndex = -1;
 }
 
@@ -62,9 +66,9 @@ void ULavaAttackComponent::CreateTargetObject()
 	if (PlayerCube && TargetEnemy && SplashObject)
 	{
 		FVector pos = TargetEnemy->GetActorLocation();
-		const FVector SpawnLocation = FVector(pos.X, pos.Y, 0);
+		// const FVector SpawnLocation = FVector(pos.X, pos.Y, 0);
 		const FActorSpawnParameters SpawnParams;
-		SplashSpawnedObject = GetWorld()->SpawnActor<AActor>(SplashObject, SpawnLocation, FRotator::ZeroRotator, SpawnParams);
+		SplashSpawnedObject = GetWorld()->SpawnActor<AActor>(SplashObject, pos, FRotator::ZeroRotator, SpawnParams);
 	}
 }
 
@@ -77,6 +81,17 @@ void ULavaAttackComponent::SetCurrentTarget()
 			CurrentTargetIndex = 0;
 		}
 		TargetEnemy = TargetEnemiesInRange[CurrentTargetIndex];
+
+		//can't rotate player as camera has prio and keeps locking BP_PlayerCube Z rotation... ideas?
+		
+		// if (TargetEnemy && PlayerCube)
+		// {
+		// 	FVector DirectionToTarget = (TargetEnemy->GetActorLocation() - PlayerCube->GetActorLocation()).GetSafeNormal();
+		// 	FRotator LookAtRotation = DirectionToTarget.Rotation();
+		// 	LookAtRotation.Pitch = 0.0f;
+		// 	LookAtRotation.Roll = 0.0f;
+		// 	PlayerCube->SetActorRotation(LookAtRotation);
+		// }
 	}
 	else
 	{
@@ -107,7 +122,8 @@ void ULavaAttackComponent::OnEnemyEnterRange(UPrimitiveComponent* OverlappedComp
 {
 	if (AAIEnemy* Enemy = Cast<AAIEnemy>(OtherActor))
 	{
-		TargetEnemiesInRange.Add(Enemy);
+		if(!TargetEnemiesInRange.Contains(Enemy))
+			TargetEnemiesInRange.Add(Enemy);
 	}
 }
 
@@ -115,6 +131,7 @@ void ULavaAttackComponent::OnEnemyExitRange(UPrimitiveComponent* OverlappedComp,
 {
 	if (AAIEnemy* Enemy = Cast<AAIEnemy>(OtherActor))
 	{
-		TargetEnemiesInRange.Remove(Enemy);
+		if(TargetEnemiesInRange.Contains(Enemy))
+			TargetEnemiesInRange.Remove(Enemy);
 	}
 }

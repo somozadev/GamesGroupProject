@@ -59,8 +59,10 @@ protected:
 	int32 CurrentTargetIndex;
 
 public:
+	UFUNCTION(BlueprintCallable)
 	void StartAiming();
 	void StopAiming();
+	UFUNCTION(BlueprintCallable)
 	void UseAttack();
 	void CreateTargetObject();
 	void MoveLeft();
