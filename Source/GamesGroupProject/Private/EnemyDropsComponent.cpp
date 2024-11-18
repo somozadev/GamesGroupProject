@@ -6,9 +6,9 @@
 UEnemyDropsComponent::UEnemyDropsComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
-	FOnCustomEvent eventDelegate = FOnCustomEvent();
-	eventDelegate.AddDynamic(this, &UEnemyDropsComponent::OnItemsDropped);
-	UEventsManager::Get()->EventMap.Add("OnItemsDropped", eventDelegate);
+	// FOnCustomEvent eventDelegate = FOnCustomEvent();
+	// eventDelegate.AddDynamic(this, &UEnemyDropsComponent::OnItemsDropped);
+	// UEventsManager::Get()->EventMap.Add("OnItemsDropped", eventDelegate);
 	minRandomSpawnRadius = 250.0f;
 	maxRandomSpawnRadius = 550.0f;
 }

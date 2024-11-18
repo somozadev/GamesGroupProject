@@ -2,6 +2,8 @@
 
 
 #include "InventoryInWorldComp.h"
+
+#include "EventsManager.h"
 #include "StructForInventoryDesc.h"
 
 
@@ -10,7 +12,6 @@ AInventoryInWorldComp::AInventoryInWorldComp()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
 
@@ -19,9 +20,9 @@ void AInventoryInWorldComp::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	
-	
-
+	FOnCustomEventOneParamInt::FDelegate delegate;
+	delegate.BindUFunction(this, FName("AddCard"));
+	UEventsManager::Get()->Subscribe(FName("OnCardPickedUp"), delegate);
 	
 	UE_LOG(LogTemp, Warning, TEXT("Inventory Activating"));
 	
@@ -58,6 +59,7 @@ void AInventoryInWorldComp::Tick(float DeltaTime)
 
 void AInventoryInWorldComp::AddCard(int ID)
 {
+    UE_LOG(LogTemp, Warning, TEXT("AddCard invoked with ID: %d"), ID);
 	int pickpoint=-1;
 	int index=0;
 	for (FtempCardBaseLine* NamedPoint:Outputingpoint )

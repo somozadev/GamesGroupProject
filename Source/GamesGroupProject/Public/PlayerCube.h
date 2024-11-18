@@ -32,16 +32,6 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category= "PlayerCube")
 	UStaticMeshComponent* PlayerMeshComponent;
 
-
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-	void MoveForward(float Value);
-	void MoveRight(float Value);
-	void LookUpRate(float Value);
-	void TurningRate(float Value);
-
 	void Interact();
 	void Cancel();
 	void CardSelectLeft();
@@ -52,6 +42,15 @@ protected:
 	void StopShooting();
 	void ToggleWaypoint();
 	void Pause();
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+	void MoveForward(float Value);
+	void MoveRight(float Value);
+	void LookUpRate(float Value);
+	void TurningRate(float Value);
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category= "Camera")
 	float DefaultTurningRate;
