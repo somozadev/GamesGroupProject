@@ -3,7 +3,10 @@
 #include "Interactable.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/Pawn.h"
+#include "EventManager.h"
 #include <Kismet/GameplayStatics.h>
+#include <string>
+#include <EventsManager.h>
 
 AInteractable::AInteractable()
 {
@@ -23,7 +26,11 @@ void AInteractable::BeginPlay()
 {
 	Super::BeginPlay();
 	targetPlayer = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+}
 
+void AInteractable::ExampleEventUsage()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Event called and method invoked!"));
 }
 
 void AInteractable::PerformInteraction(AActor* interactorActor)
@@ -61,7 +68,6 @@ void AInteractable::Tick(float DeltaTime)
 			isCharmed = false;
 		}
 	}
-
 }
 
 void AInteractable::Interact(AActor* interactorActor)
@@ -71,8 +77,6 @@ void AInteractable::Interact(AActor* interactorActor)
 
 void AInteractable::HandlePickup(AActor* interactorActor)
 {
-	// give obj_id to player, need inventory and items ids table first for this
-	UE_LOG(LogTemp, Warning, TEXT("Object picked up!"));
 	Destroy();
 }
 
