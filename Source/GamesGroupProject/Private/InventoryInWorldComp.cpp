@@ -7,10 +7,8 @@
 #include "StructForInventoryDesc.h"
 
 
-// Sets default values
 AInventoryInWorldComp::AInventoryInWorldComp()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 }
 
@@ -19,14 +17,14 @@ AInventoryInWorldComp::AInventoryInWorldComp()
 void AInventoryInWorldComp::BeginPlay()
 {
 	Super::BeginPlay();
+	FOnCustomEventOneParamInt::FDelegate cardPickupDelegate;
+	FOnCustomEventOneParamInt::FDelegate acornPickupDelegate;
+	cardPickupDelegate.BindUFunction(this, FName("AddCard"));
+	acornPickupDelegate.BindUFunction(this, FName("AddCurrency"));
+	UEventsManager::Get()->Subscribe(FName("OnCardPickedUp"), cardPickupDelegate);
+	UEventsManager::Get()->Subscribe(FName("OnAcornPickedUp"), acornPickupDelegate);
 	
-	FOnCustomEventOneParamInt::FDelegate delegate;
-	delegate.BindUFunction(this, FName("AddCard"));
-	UEventsManager::Get()->Subscribe(FName("OnCardPickedUp"), delegate);
 	
-	UE_LOG(LogTemp, Warning, TEXT("Inventory Activating"));
-	
-//	FString s = InvCardPossible;
 	
 	FString a;
 	InvCardPossible->GetAllRows(a, Outputingpoint);
@@ -59,33 +57,36 @@ void AInventoryInWorldComp::Tick(float DeltaTime)
 
 void AInventoryInWorldComp::AddCard(int ID)
 {
-    UE_LOG(LogTemp, Warning, TEXT("AddCard invoked with ID: %d"), ID);
-	int pickpoint=-1;
-	int index=0;
-	for (FtempCardBaseLine* NamedPoint:Outputingpoint )
+	UE_LOG(LogTemp, Warning, TEXT("AddCard invoked with ID: %d"), ID);
+
+	int pickpoint = -1;
+	int index = 0;
+
+	for (FtempCardBaseLine* NamedPoint : Outputingpoint)
 	{
 		int workingID = NamedPoint->ID;
 		if (workingID == ID)
 		{
 			pickpoint = index;
 		}
-		index ++;
+		index++;
 	}
 	if (pickpoint != -1)
 	{
-		bool test=false;
-		for (FVector2D pointer : InventoryActive)
+		bool found = false;
+
+		for (FVector2D& pointer : InventoryActive) 
 		{
-			if(pointer.X == ID)
+			if (pointer.X == ID)
 			{
-				pointer.Y=pointer.Y+1;
-				test=true;
+				pointer.Y = pointer.Y + 1; 
+				found = true;
+				break; 
 			}
 		}
-		InventoryActive.Add(FVector2D(ID,1));
-		return ;
+		if (!found)
+			InventoryActive.Add(FVector2D(ID, 1));
 	}
-	else return;
 }
 
 bool AInventoryInWorldComp::UseCard(int ID)
@@ -120,5 +121,28 @@ bool AInventoryInWorldComp::UseCard(int ID)
 		}
 		return (test);
 	}
+}
+
+
+void AInventoryInWorldComp::AddCurrency(const int Amount)
+{
+	currentCurrency += Amount;
+}
+bool AInventoryInWorldComp::UseCurrency(const int Amount)
+{
+	if(currentCurrency - Amount >= 0 )
+	{
+		currentCurrency -= Amount;
+		return true;
+	}
+	return false;
+}
+float AInventoryInWorldComp::LoadCurrentHp() const
+{
+	return currentHp;
+}
+void AInventoryInWorldComp::SaveCurrentHp(const float HP)
+{
+	currentHp = HP;
 }
 
