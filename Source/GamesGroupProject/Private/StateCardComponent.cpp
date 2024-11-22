@@ -32,6 +32,16 @@ void UStateCardComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
+
+	if (!m_isInUse)
+		return;
+
+	m_timeElapsed += DeltaTime;
+
+	if (m_timeElapsed >= m_duration)
+	{
+		DeactivateCard();
+	}
 }
 
 bool UStateCardComponent::ActivateCard()
@@ -48,12 +58,15 @@ bool UStateCardComponent::UseCard()
 
 	m_timeElapsed = 0.0f;
 	m_isInUse = true;
-
+	//Calling player to toggle the state will happen in children
 	return true;
 }
 
 bool UStateCardComponent::DeactivateCard()
 {
-	return Super::DeactivateCard();
+	Super::DeactivateCard();
+	m_isInUse = false;
+	//Calling player to toggle the state will happen in children
+	return true;
 }
 
