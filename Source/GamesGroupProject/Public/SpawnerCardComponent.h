@@ -21,6 +21,7 @@ protected:
 
 	int m_attackObjectType;
 	AObjectPoolingSystem* m_objectPool;
+	UStaticMeshComponent* m_targetReticle;
 
 public:
 	// Called every frame
@@ -29,5 +30,7 @@ public:
 
 	virtual bool ActivateCard() override;
 	virtual bool UseCard() override;
+	virtual bool UseCard(AActor* target) override;
+	virtual bool UseCard(TArray<AAIEnemy*>& targets) override;
 	virtual bool DeactivateCard() override;
 };

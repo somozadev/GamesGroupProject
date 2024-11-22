@@ -17,7 +17,7 @@ UCardComponent::UCardComponent()
 	// ...
 
 	m_player = Cast<APlayerCube>(GetOwner());
-	
+	m_targetIndex = -1;
 }
 
 
@@ -47,6 +47,27 @@ bool UCardComponent::ActivateCard()
 }
 
 bool UCardComponent::UseCard()
+{
+	if (!m_isReusable)
+	{
+		m_count--;
+	}
+	return true;
+}
+
+bool UCardComponent::UseCard(AActor* target)
+{
+	if (target == nullptr || !IsValid(target))
+		return false;
+	
+	if (!m_isReusable)
+	{
+		m_count--;
+	}
+	return true;
+}
+
+bool UCardComponent::UseCard(TArray<AAIEnemy*>& targets)
 {
 	if (!m_isReusable)
 	{

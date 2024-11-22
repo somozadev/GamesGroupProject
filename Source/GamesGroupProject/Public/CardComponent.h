@@ -9,6 +9,7 @@
 #include "CardComponent.generated.h"
 
 class APlayerCube;
+class AAIEnemy;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class GAMESGROUPPROJECT_API UCardComponent : public UActorComponent
@@ -30,7 +31,7 @@ protected:
 		bool m_isReusable = false;
 
 	AActor* m_target;
-	TArray<AActor*> m_targetsInRange;
+	int m_targetIndex;
 
 public:	
 	// Called every frame
@@ -38,5 +39,7 @@ public:
 
 	virtual bool ActivateCard();
 	virtual bool UseCard();
+	virtual bool UseCard(AActor* target);
+	virtual bool UseCard(TArray<AAIEnemy*>& targets);
 	virtual bool DeactivateCard();
 };

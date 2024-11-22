@@ -2,7 +2,10 @@
 
 
 #include "SpawnerCardComponent.h"
+
+#include "AIEnemy.h"
 #include "ObjectPoolingSystem.h"
+#include "PlayerCube.h"
 #include "Kismet/GameplayStatics.h"
 
 
@@ -14,9 +17,20 @@ USpawnerCardComponent::USpawnerCardComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 
 	// ...
-
+	UCardComponent();
 	m_objectPool = Cast<AObjectPoolingSystem>(UGameplayStatics::GetActorOfClass(GetWorld(), AObjectPoolingSystem::StaticClass()));
 	m_attackObjectType = 0;
+
+	if (m_player != nullptr)
+	{
+		TArray<UActorComponent*> comps = m_player->GetComponentsByTag(UStaticMeshComponent::StaticClass(), FName("Reticle"));
+		if (comps.Num() > 0)
+			m_targetReticle = Cast<UStaticMeshComponent>(comps[0]);
+		else
+			m_targetReticle = nullptr;
+	}
+	else
+		m_targetReticle = nullptr;
 }
 
 
@@ -37,12 +51,19 @@ void USpawnerCardComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
+
+	if (m_target != nullptr && m_targetReticle != nullptr && m_targetIndex > -1)
+	{
+		m_targetReticle->SetWorldLocation(m_target->GetActorLocation());
+	}
 }
 
 bool USpawnerCardComponent::ActivateCard()
 {
 	if (!Super::ActivateCard())
 		return false;
+
+	return true;
 }
 
 bool USpawnerCardComponent::UseCard()
@@ -50,6 +71,16 @@ bool USpawnerCardComponent::UseCard()
 	Super::UseCard();
 
 	return true;
+}
+
+bool USpawnerCardComponent::UseCard(AActor* target)
+{
+	return Super::UseCard(target);
+}
+
+bool USpawnerCardComponent::UseCard(TArray<AAIEnemy*>& targets)
+{
+	return Super::UseCard(targets);
 }
 
 bool USpawnerCardComponent::DeactivateCard()

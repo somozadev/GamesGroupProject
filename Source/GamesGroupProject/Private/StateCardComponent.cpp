@@ -62,6 +62,11 @@ bool UStateCardComponent::UseCard()
 	return true;
 }
 
+bool UStateCardComponent::UseCard(AActor* target)
+{
+	return Super::UseCard(target);
+}
+
 bool UStateCardComponent::DeactivateCard()
 {
 	Super::DeactivateCard();

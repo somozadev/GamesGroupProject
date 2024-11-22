@@ -31,5 +31,6 @@ public:
 
 	virtual bool ActivateCard() override;
 	virtual bool UseCard() override;
+	virtual bool UseCard(AActor* target) override;
 	virtual bool DeactivateCard() override;
 };
