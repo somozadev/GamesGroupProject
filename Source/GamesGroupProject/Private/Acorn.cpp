@@ -8,9 +8,10 @@ AAcorn::AAcorn()
 
 void AAcorn::HandlePickup(AActor* interactorActor)
 {
+	
 	if (interactorActor)
 	{
-		UEventsManager::Get()->Invoke(FName("OnAcornPicked"), ID, amount);
+		UEventsManager::Get()->Invoke(FName("OnAcornPickedUp"), amount);
 		Destroy();
 	}
 }

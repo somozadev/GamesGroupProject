@@ -18,9 +18,11 @@ public:
 	UPROPERTY(EditAnywhere)
 	UDataTable* InvCardPossible;
 	UPROPERTY(VisibleAnywhere)
-	TArray<FVector2D> InventoryActive={FVector2D::ZeroVector};
-
-	//UPROPERTY(EditAnywhere)
+	TArray<FVector2D> InventoryActive; //={FVector2D::ZeroVector}
+	UPROPERTY(VisibleAnywhere)
+	int currentCurrency;
+	UPROPERTY(VisibleAnywhere)
+	float currentHp; 
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -28,8 +30,17 @@ public:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	UFUNCTION() //requires to has UFUNCTION() for the eventsmanager 
+	UFUNCTION() //requires to have UFUNCTION() for the eventsmanager 
 	void AddCard(int ID);
+	UFUNCTION()
 	bool UseCard(int ID);
+	UFUNCTION() 
+	void AddCurrency(int Amount);
+	UFUNCTION()
+	bool UseCurrency(int Amount);
+	UFUNCTION()
+	float LoadCurrentHp() const;
+	UFUNCTION()
+	void SaveCurrentHp(float HP);
 	
 };

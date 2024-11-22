@@ -13,13 +13,10 @@ public:
 	AAcorn();
 
 protected:
-protected:
 	virtual void HandlePickup(AActor* interactorActor) override;
 
 
 public:
-	UPROPERTY(EditAnywhere, Category="Acorn")
-	int ID;
 	UPROPERTY(EditAnywhere, Category="Acorn")
 	int amount;
 };
