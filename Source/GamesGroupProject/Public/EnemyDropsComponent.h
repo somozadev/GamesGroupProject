@@ -9,7 +9,7 @@ UENUM(BlueprintType)
 enum class ECardDropType : uint8
 {
 	Combat UMETA(DisplayName = "Combat"),
-	Puzzle UMETA(DisplayName = "Puzzle")
+	// Puzzle UMETA(DisplayName = "Puzzle")
 };
 
 UENUM(BlueprintType)
@@ -115,7 +115,6 @@ protected:
 	float maxRandomSpawnRadius;
 
 private:
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Drops")
 	void SpawnDroppedElement(TSubclassOf<AInteractable> spawnable);
 
 	EGroup Group;
