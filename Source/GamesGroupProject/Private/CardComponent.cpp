@@ -67,7 +67,7 @@ bool UCardComponent::UseCard(AActor* target)
 	return true;
 }
 
-bool UCardComponent::UseCard(TArray<AAIEnemy*>& targets)
+bool UCardComponent::UseCard(AActor* target, TArray<AAIEnemy*>& otherTargets)
 {
 	if (!m_isReusable)
 	{

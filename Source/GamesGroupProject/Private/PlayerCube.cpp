@@ -2,11 +2,15 @@
 
 
 #include "PlayerCube.h"
+
+#include "AIEnemy.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h" 
 #include "Components/StaticMeshComponent.h"
 #include "Components/InputComponent.h"
+#include "Components/SphereComponent.h"
 #include "GameFramework/Controller.h"
+#include "CardComponent.h"
 
 
 
@@ -30,6 +34,13 @@ APlayerCube::APlayerCube()
 	DefaultTurningRate = 70.0f;
 	DefaultLookUpRate = 45.0f;
 
+	AttackDetectionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("DetectionSphere"));
+	AttackDetectionSphere->InitSphereRadius(AimRadius);
+	AttackDetectionSphere->SetCollisionProfileName(TEXT("OverlapAllDynamic"));
+	AttackDetectionSphere->SetLineThickness(1);
+	AttackDetectionSphere->OnComponentBeginOverlap.AddDynamic(this, &APlayerCube::OnEnemyEnterRange);
+	AttackDetectionSphere->OnComponentEndOverlap.AddDynamic(this, &APlayerCube::OnEnemyExitRange);
+
 }	
 
 
@@ -37,7 +48,16 @@ APlayerCube::APlayerCube()
 void APlayerCube::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	TArray<UActorComponent*> components = GetComponentsByTag(UCardComponent::StaticClass(), FName("CardComp"));
+	for (int i = 0; i < components.Num(); i++)
+	{
+		UCardComponent* cardComp = Cast<UCardComponent>(components[i]);
+		if (cardComp)
+		{
+			CardList.Add(cardComp);
+		}
+	}
 }
 
 void APlayerCube::MoveForward(float Value)
@@ -108,9 +128,21 @@ void APlayerCube::DropHeldItem()
 	UE_LOG(LogTemp, Warning, TEXT("DropHoldItem input pressed"));
 }
 
+void APlayerCube::Aim()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Preparing Card"));
+	//Check if card has ammo
+	//Don't change to aiming stance if not
+}
+
 void APlayerCube::Shoot()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Shoot input pressed"));
+
+	if (CardList.IsValidIndex(CurrentCard))
+	{
+		CardList[CurrentCard]->UseCard(TargetEnemiesInRange);
+	}
 }
 
 void APlayerCube::StopShooting()
@@ -126,6 +158,26 @@ void APlayerCube::ToggleWaypoint()
 void APlayerCube::Pause()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Pause input pressed"));
+}
+
+void APlayerCube::OnEnemyEnterRange(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (AAIEnemy* Enemy = Cast<AAIEnemy>(OtherActor))
+	{
+		if(!TargetEnemiesInRange.Contains(Enemy))
+			TargetEnemiesInRange.Add(Enemy);
+	}
+}
+
+void APlayerCube::OnEnemyExitRange(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	if (AAIEnemy* Enemy = Cast<AAIEnemy>(OtherActor))
+	{
+		if(TargetEnemiesInRange.Contains(Enemy))
+			TargetEnemiesInRange.Remove(Enemy);
+	}
 }
 
 // Called every frame

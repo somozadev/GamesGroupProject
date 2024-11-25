@@ -3,6 +3,8 @@
 
 #include "LightningCardComponent.h"
 
+#include "AIEnemy.h"
+
 
 // Sets default values for this component's properties
 ULightningCardComponent::ULightningCardComponent()
@@ -39,13 +41,30 @@ bool ULightningCardComponent::ActivateCard()
 	return Super::ActivateCard();
 }
 
-bool ULightningCardComponent::UseCard(TArray<AAIEnemy*>& targets)
+bool ULightningCardComponent::UseCard(AActor* target, TArray<AAIEnemy*>& otherTargets)
 {
-	if (!Super::UseCard(targets))
+	if (!Super::UseCard(target, otherTargets))
 		return false;
 
 	//Deal damage to all targets
 	//Spawn the effect for the lightning
+
+	if (otherTargets.Num() == 0)
+		return false;
+	
+	AAIEnemy* enemy = Cast<AAIEnemy>(target);
+
+	if (!enemy)
+		return false;
+
+	if (otherTargets.Num() == 1)
+	{
+		enemy->TakeAttackDamage(m_damage);
+	}
+	else
+	{
+		//Do multi attack stuff here
+	}
 
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, FString::Printf(TEXT("ZAP!")));
 	return true;

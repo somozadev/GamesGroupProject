@@ -17,7 +17,10 @@ USpawnerCardComponent::USpawnerCardComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 
 	// ...
-	UCardComponent();
+	//UCardComponent();
+	m_player = Cast<APlayerCube>(GetOwner());
+	m_targetIndex = -1;
+	
 	m_objectPool = Cast<AObjectPoolingSystem>(UGameplayStatics::GetActorOfClass(GetWorld(), AObjectPoolingSystem::StaticClass()));
 	m_attackObjectType = 0;
 
@@ -78,9 +81,9 @@ bool USpawnerCardComponent::UseCard(AActor* target)
 	return Super::UseCard(target);
 }
 
-bool USpawnerCardComponent::UseCard(TArray<AAIEnemy*>& targets)
+bool USpawnerCardComponent::UseCard(AActor* target, TArray<AAIEnemy*>& otherTargets)
 {
-	return Super::UseCard(targets);
+	return Super::UseCard(target, otherTargets);
 }
 
 bool USpawnerCardComponent::DeactivateCard()

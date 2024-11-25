@@ -13,6 +13,9 @@ class USpringArmComponent;
 class UCameraComponent;
 class UStaticMeshComponent;
 class UInputAction;
+class USphereComponent;
+class AAIEnemy;
+class UCardComponent;
 
 UCLASS()
 class GAMESGROUPPROJECT_API APlayerCube : public ACharacter
@@ -38,6 +41,7 @@ public:
 	void CardSelectRight();
 	void HoldItem();
 	void DropHeldItem();
+	void Aim();
 	void Shoot();
 	void StopShooting();
 	void ToggleWaypoint();
@@ -57,6 +61,25 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category= "Camera")
 	float DefaultLookUpRate;
+
+	USphereComponent* AttackDetectionSphere;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category= "AttackDetection")
+	float AimRadius = 100.0f;
+
+	UPROPERTY(VisibleAnywhere, Category = "AttackDetection")
+	TArray<AAIEnemy*> TargetEnemiesInRange;
+
+	TArray<UCardComponent*> CardList;
+	int CurrentCard = 0;
+
+	UFUNCTION()
+	void OnEnemyEnterRange(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+						   int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+	void OnEnemyExitRange(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+						  int32 OtherBodyIndex);
 
 public:	
 	// Called every frame

@@ -40,6 +40,6 @@ public:
 	virtual bool ActivateCard();
 	virtual bool UseCard();
 	virtual bool UseCard(AActor* target);
-	virtual bool UseCard(TArray<AAIEnemy*>& targets);
+	virtual bool UseCard(AActor* target, TArray<AAIEnemy*>& otherTargets);
 	virtual bool DeactivateCard();
 };

@@ -23,6 +23,9 @@ protected:
 	AObjectPoolingSystem* m_objectPool;
 	UStaticMeshComponent* m_targetReticle;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "CardStats")
+	float m_damage;
+
 public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
@@ -31,6 +34,6 @@ public:
 	virtual bool ActivateCard() override;
 	virtual bool UseCard() override;
 	virtual bool UseCard(AActor* target) override;
-	virtual bool UseCard(TArray<AAIEnemy*>& targets) override;
+	virtual bool UseCard(AActor* target, TArray<AAIEnemy*>& otherTargets) override;
 	virtual bool DeactivateCard() override;
 };

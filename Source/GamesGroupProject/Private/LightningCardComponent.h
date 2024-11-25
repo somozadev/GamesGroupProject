@@ -24,5 +24,5 @@ public:
 	                           FActorComponentTickFunction* ThisTickFunction) override;
 
 	bool ActivateCard() override;
-	bool UseCard(TArray<AAIEnemy*>& targets) override;
+	bool UseCard(AActor* target, TArray<AAIEnemy*>& otherTargets) override;
 };
