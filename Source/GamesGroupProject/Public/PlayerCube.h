@@ -70,6 +70,8 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "AttackDetection")
 	TArray<AAIEnemy*> TargetEnemiesInRange;
 
+	AAIEnemy* TargetEnemy = nullptr;
+
 	TArray<UCardComponent*> CardList;
 	int CurrentCard = 0;
 

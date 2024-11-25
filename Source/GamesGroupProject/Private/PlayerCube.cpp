@@ -141,7 +141,7 @@ void APlayerCube::Shoot()
 
 	if (CardList.IsValidIndex(CurrentCard))
 	{
-		CardList[CurrentCard]->UseCard(TargetEnemiesInRange);
+		CardList[CurrentCard]->UseCard(TargetEnemy, TargetEnemiesInRange);
 	}
 }
 
@@ -166,7 +166,14 @@ void APlayerCube::OnEnemyEnterRange(UPrimitiveComponent* OverlappedComp, AActor*
 	if (AAIEnemy* Enemy = Cast<AAIEnemy>(OtherActor))
 	{
 		if(!TargetEnemiesInRange.Contains(Enemy))
+		{
 			TargetEnemiesInRange.Add(Enemy);
+
+			if (TargetEnemy == nullptr)
+			{
+				TargetEnemy = TargetEnemiesInRange[0];
+			}
+		}
 	}
 }
 
@@ -176,7 +183,21 @@ void APlayerCube::OnEnemyExitRange(UPrimitiveComponent* OverlappedComp, AActor* 
 	if (AAIEnemy* Enemy = Cast<AAIEnemy>(OtherActor))
 	{
 		if(TargetEnemiesInRange.Contains(Enemy))
+		{
 			TargetEnemiesInRange.Remove(Enemy);
+
+			if (Enemy->GetUniqueID() == TargetEnemy->GetUniqueID())
+			{
+				if (TargetEnemiesInRange.Num() == 0)
+				{
+					TargetEnemy = nullptr;
+				}
+				else
+				{
+					TargetEnemy = TargetEnemiesInRange[0];
+				}
+			}
+		}
 	}
 }
 
