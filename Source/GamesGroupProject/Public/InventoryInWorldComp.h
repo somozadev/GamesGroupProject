@@ -19,7 +19,9 @@ public:
 	UDataTable* InvCardPossible;
 	UPROPERTY(VisibleAnywhere)
 	TArray<FVector2D> InventoryActive={FVector2D::ZeroVector};
-
+	bool save();
+	bool load();
+	bool clear();
 	//UPROPERTY(EditAnywhere)
 
 	// Called when the game starts or when spawned

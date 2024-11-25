@@ -5,7 +5,8 @@
 
 #include "EventsManager.h"
 #include "StructForInventoryDesc.h"
-
+#include "Misc/FileHelper.h"
+#include "Misc/Paths.h"
 
 // Sets default values
 AInventoryInWorldComp::AInventoryInWorldComp()
@@ -14,6 +15,29 @@ AInventoryInWorldComp::AInventoryInWorldComp()
 	PrimaryActorTick.bCanEverTick = true;
 }
 
+
+bool AInventoryInWorldComp::save()
+{
+	bool success = true;
+
+	//TSharedRef< FJsonObject > SaveFile = MakeShared<FJsonObject>();
+	
+	return success;
+	
+}
+
+bool AInventoryInWorldComp::load()
+{
+	bool success = true;
+
+	return success;
+}
+
+bool AInventoryInWorldComp::clear()
+{
+	bool success = true;
+	return success;
+}
 
 // Called when the game starts or when spawned
 void AInventoryInWorldComp::BeginPlay()
