@@ -40,6 +40,13 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Interaction")
 	void Interact(AActor* interactorActor);
 
+	UFUNCTION(BlueprintCallable, Category="Interaction")
+	void HandleUse(AActor* interactorActor);
+	UFUNCTION(BlueprintCallable, Category="Interaction")
+	void HandleCharm(AActor* interactorActor);
+	UFUNCTION(BlueprintCallable, Category="Interaction")
+	void HandleInstant(AActor* interactorActor);
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Interaction")
 	EInteractionType interactionType;
 
@@ -55,9 +62,6 @@ public:
 private:
 	//As this type of interactions are not 100% defined yet, this code will remain as so. Once it's done, better approach to virtualize HandleInteraction and each type, with it's own class, handles it's own interaction.
 	bool isCharmed{false};
-	void HandleUse(AActor* interactorActor);
-	void HandleCharm(AActor* interactorActor);
-	void HandleInstant(AActor* interactorActor);
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Interaction", meta = (AllowPrivateAccess = "true"))
 	class UBoxComponent* TriggerZone;
 	UFUNCTION()
