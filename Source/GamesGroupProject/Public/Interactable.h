@@ -9,19 +9,20 @@
 UENUM(BlueprintType)
 enum class EInteractionType : uint8
 {
-	EIT_Pickup   UMETA(DisplayName = "Pickup"),
-	EIT_Use      UMETA(DisplayName = "Use"),
-	EIT_Charm  UMETA(DisplayName = "Charm"),
-	EIT_Instant  UMETA(DisplayName = "Instant")
+	EIT_Pickup UMETA(DisplayName = "Pickup"),
+	EIT_Use UMETA(DisplayName = "Use"),
+	EIT_Charm UMETA(DisplayName = "Charm"),
+	EIT_Instant UMETA(DisplayName = "Instant")
 };
 
 
 UCLASS()
-class GAMESGROUPPROJECT_API AInteractable : public AActor //it might need to inherit from a object class, or just add here the actual object_id and so on of it.. based on inventory mostly to decide
+class GAMESGROUPPROJECT_API AInteractable : public AActor
+	//it might need to inherit from a object class, or just add here the actual object_id and so on of it.. based on inventory mostly to decide
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
 	AInteractable();
 
@@ -29,37 +30,47 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	virtual void PerformInteraction(AActor* interactorActor);
+	virtual void HandlePickup(AActor* interactorActor);
+	virtual void HandleUse(AActor* interactorActor);
+	UFUNCTION()
+	virtual void OnTriggerEnter(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	                            UPrimitiveComponent* OtherComp,
+	                            int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	UFUNCTION()
+	virtual void OnTriggerExit(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	                           UPrimitiveComponent* OtherComp,
+	                           int32 OtherBodyIndex);
 	APawn* targetPlayer;
-public:	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Interaction", meta = (AllowPrivateAccess = "true"))
+	class URotatingMovementComponent* RotationMovement;
+public:
 	// Called every frame
+	
+
+	
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable, Category="Interaction")
 	void Interact(AActor* interactorActor);
+	UFUNCTION(BlueprintCallable, Category="Interaction")
+	void HandleCharm(AActor* interactorActor);
+	UFUNCTION(BlueprintCallable, Category="Interaction")
+	void HandleInstant(AActor* interactorActor);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Interaction")
 	EInteractionType interactionType;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interaction")
 	bool useTriggers;
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Interaction")
-	float charmedSpeed = 600.0f; 
+	float charmedSpeed = 600.0f;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Interaction")
+	bool InContact;
 
-	UFUNCTION()
-	void ExampleEventUsage();
-
-
-private:  //As this type of interactions are not 100% defined yet, this code will remain as so. Once it's done, better approach to virtualize HandleInteraction and each type, with it's own class, handles it's own interaction.
-	bool isCharmed{ false };
-	void HandlePickup(AActor* interactorActor);
-	void HandleUse(AActor* interactorActor);
-	void HandleCharm(AActor* interactorActor);
-	void HandleInstant(AActor* interactorActor);
+private:
+	//As this type of interactions are not 100% defined yet, this code will remain as so. Once it's done, better approach to virtualize HandleInteraction and each type, with it's own class, handles it's own interaction.
+	bool isCharmed{false};
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Interaction", meta = (AllowPrivateAccess = "true"))
 	class UBoxComponent* TriggerZone;
-	UFUNCTION() void OnTriggerEnter(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-	UFUNCTION() void OnTriggerExit(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
-
-
 };

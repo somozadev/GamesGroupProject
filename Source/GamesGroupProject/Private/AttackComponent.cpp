@@ -8,7 +8,7 @@ UAttackComponent::UAttackComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = false;
+	PrimaryComponentTick.bCanEverTick = true;
 
 	// ...
 
@@ -47,5 +47,10 @@ bool UAttackComponent::GetIsDelayed()
 float UAttackComponent::GetDelayTime()
 {
 	return m_attackDelay;
+}
+
+float UAttackComponent::GetAttackRadius()
+{
+	return m_attackRadius;
 }
 
