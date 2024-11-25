@@ -279,7 +279,6 @@ bool AAIEnemy::TakeAttackDamage(int damage)
 		m_warningMesh->SetVisibility(false);
 		SetActorEnableCollision(false);
 		GetMesh()->SetVisibility(false);
-		Destroy();
 	}
 		
 	//TO DO: Play death animation/deactivate if enemy dies

@@ -82,11 +82,9 @@ void AInteractable::HandlePickup(AActor* interactorActor)
 
 void AInteractable::HandleUse(AActor* interactorActor)
 {
-
-	//trigger bp to show player Wb_interactbutton
-
+	// call the obj_id interacted method , need objects list for this 
 	UE_LOG(LogTemp, Warning, TEXT("Object Handled!"));
-	// Destroy();
+	Destroy();
 }
 
 void AInteractable::HandleCharm(AActor* interactorActor)
