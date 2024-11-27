@@ -2,7 +2,8 @@
 #include "CoreMinimal.h"
 #include "EventsManager.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnCustomEvent); 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnCustomEvent);
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCustomEventOneParamString, FString, Param1);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCustomEventOneParamInt, int, Param1);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnCustomEventOneParamIntInt, int, Param1, int , Param2);
@@ -32,8 +33,8 @@ public:
     void Subscribe(FName eventName, FOnCustomEventOneParamIntInt::FDelegate& delegateEvent);
     void Unsubscribe(FName eventName, FOnCustomEventOneParamIntInt::FDelegate& delegateEvent);
     void Invoke(FName eventName, int param1, int param2);
-
     
+
     TMap<FName, FOnCustomEvent> EventMap;
     TMap<FName, FOnCustomEventOneParamString> EventMapOneParamString;
     TMap<FName, FOnCustomEventOneParamInt> EventMapOneParamInt;

@@ -34,11 +34,12 @@ FDropItems UEnemyDropsComponent::GetProbabilityDrop(ECardDropType CardDropType, 
 				DropItems = FDropItems(1, 1, 1, 0, 0, 0, 0, 0, 0);
 			else
 				DropItems = FDropItems(1, 1, 0, 0, 1, 0, 0, 0, 0);
-		else if (CardDropType == ECardDropType::Puzzle)
-			if (RandomChance <= 40.f)
-				DropItems = FDropItems(2, 0, 0, 0, 0, 0, 1, 0, 0);
-			else if (RandomChance <= 100.f)
-				DropItems = FDropItems(1, 0, 0, 0, 0, 0, 2, 0, 0);
+
+		// else if (CardDropType == ECardDropType::Puzzle)
+		// 	if (RandomChance <= 40.f)
+		// 		DropItems = FDropItems(2, 0, 0, 0, 0, 0, 1, 0, 0);
+		// 	else if (RandomChance <= 100.f)
+		// 		DropItems = FDropItems(1, 0, 0, 0, 0, 0, 2, 0, 0);
 		break;
 
 	case ELevel::Level2:
@@ -51,11 +52,12 @@ FDropItems UEnemyDropsComponent::GetProbabilityDrop(ECardDropType CardDropType, 
 				DropItems = FDropItems(2, 0, 0, 0, 1, 1, 0, 0, 0);
 			else
 				DropItems = FDropItems(1, 1, 0, 0, 1, 0, 0, 0, 0);
-		else if (CardDropType == ECardDropType::Puzzle)
-			if (RandomChance <= 30.f)
-				DropItems = FDropItems(3, 0, 0, 0, 0, 0, 0, 2, 0);
-			else if (RandomChance <= 100.f)
-				DropItems = FDropItems(2, 0, 0, 0, 0, 0, 0, 1, 0);
+
+		// else if (CardDropType == ECardDropType::Puzzle)
+		// 	if (RandomChance <= 30.f)
+		// 		DropItems = FDropItems(3, 0, 0, 0, 0, 0, 0, 2, 0);
+		// 	else if (RandomChance <= 100.f)
+		// 		DropItems = FDropItems(2, 0, 0, 0, 0, 0, 0, 1, 0);
 		break;
 
 	case ELevel::Level3:
@@ -68,11 +70,12 @@ FDropItems UEnemyDropsComponent::GetProbabilityDrop(ECardDropType CardDropType, 
 				DropItems = FDropItems(3, 0, 1, 1, 0, 0, 0, 0, 0);
 			else
 				DropItems = FDropItems(1, 0, 0, 0, 1, 1, 0, 0, 0);
-		else if (CardDropType == ECardDropType::Puzzle)
-			if (RandomChance <= 30.f)
-				DropItems = FDropItems(2, 0, 0, 0, 0, 0, 0, 0, 1);
-			else if (RandomChance <= 100.f)
-				DropItems = FDropItems(1, 0, 0, 0, 0, 0, 0, 0, 2);
+
+		// else if (CardDropType == ECardDropType::Puzzle)
+		// 	if (RandomChance <= 30.f)
+		// 		DropItems = FDropItems(2, 0, 0, 0, 0, 0, 0, 0, 1);
+		// 	else if (RandomChance <= 100.f)
+		// 		DropItems = FDropItems(1, 0, 0, 0, 0, 0, 0, 0, 2);
 
 		break;
 	}
@@ -94,61 +97,51 @@ void UEnemyDropsComponent::SpawnItems(const FDropItems& Items)
 	if (Items.Acorns > 0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Spawning %d Acorn(s)"), Items.Acorns);
-		// Add actual spawning logic here, e.g.:
 		SpawnDroppedElement(acornBP);
 	}
 	if (Items.Lava > 0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Spawning %d Lava Combat Card(s)"), Items.Lava);
-		// Add actual spawning logic here
 		SpawnDroppedElement(lavaBP);
 
 	}
 	if (Items.Thunder > 0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Spawning %d Thunder Combat Card(s)"), Items.Thunder);
-		// Add actual spawning logic here
 		SpawnDroppedElement(thunderBP);
 	}
 	if (Items.Toxin > 0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Spawning %d Toxin Combat Card(s)"), Items.Toxin);
-		// Add actual spawning logic here		
 		SpawnDroppedElement(toxinBP);
 
 	}
 	if (Items.Balance > 0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Spawning %d Balance Combat Card(s)"), Items.Balance);
-		// Add actual spawning logic here
 		SpawnDroppedElement(balanceBP);
 	}
 	if (Items.Invincibility > 0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Spawning %d Invincibility Card(s)"), Items.Invincibility);
-		// Add actual spawning logic here  
 		SpawnDroppedElement(invincibilityBP);
 	}
 	if (Items.Floating > 0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Spawning %d Invincibility Card(s)"), Items.Floating);
-		// Add actual spawning logic here  
 		SpawnDroppedElement(floatingBP);
 	}
 	if (Items.Magnetism > 0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Spawning %d Invincibility Card(s)"), Items.Magnetism);
-		// Add actual spawning logic here  
 		SpawnDroppedElement(magnetismBP);
 	}
 	if (Items.Laser > 0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Spawning %d Invincibility Card(s)"), Items.Laser);
-		// Add actual spawning logic here  
 		SpawnDroppedElement(laserBP);
 	}
 
-	UEventsManager::Get()->Invoke("OnItemsDropped");
 }
 
 void UEnemyDropsComponent::SpawnDroppedElement(TSubclassOf<AInteractable> spawnable)
@@ -173,8 +166,6 @@ void UEnemyDropsComponent::SpawnDroppedElement(TSubclassOf<AInteractable> spawna
 void UEnemyDropsComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// ...
 }
 
 
@@ -184,5 +175,4 @@ void UEnemyDropsComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
 }

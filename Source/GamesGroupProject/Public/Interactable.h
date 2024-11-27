@@ -31,17 +31,27 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void PerformInteraction(AActor* interactorActor);
 	virtual void HandlePickup(AActor* interactorActor);
+	virtual void HandleUse(AActor* interactorActor);
+	UFUNCTION()
+	virtual void OnTriggerEnter(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	                            UPrimitiveComponent* OtherComp,
+	                            int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	UFUNCTION()
+	virtual void OnTriggerExit(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	                           UPrimitiveComponent* OtherComp,
+	                           int32 OtherBodyIndex);
 	APawn* targetPlayer;
-
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Interaction", meta = (AllowPrivateAccess = "true"))
+	class URotatingMovementComponent* RotationMovement;
 public:
 	// Called every frame
+	
+
+	
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable, Category="Interaction")
 	void Interact(AActor* interactorActor);
-
-	UFUNCTION(BlueprintCallable, Category="Interaction")
-	void HandleUse(AActor* interactorActor);
 	UFUNCTION(BlueprintCallable, Category="Interaction")
 	void HandleCharm(AActor* interactorActor);
 	UFUNCTION(BlueprintCallable, Category="Interaction")
@@ -55,19 +65,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Interaction")
 	float charmedSpeed = 600.0f;
-
-	UFUNCTION()
-	void ExampleEventUsage();
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Interaction")
+	bool InContact;
 
 private:
 	//As this type of interactions are not 100% defined yet, this code will remain as so. Once it's done, better approach to virtualize HandleInteraction and each type, with it's own class, handles it's own interaction.
 	bool isCharmed{false};
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Interaction", meta = (AllowPrivateAccess = "true"))
 	class UBoxComponent* TriggerZone;
-	UFUNCTION()
-	void OnTriggerEnter(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
-	                    int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-	UFUNCTION()
-	void OnTriggerExit(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
-	                   int32 OtherBodyIndex);
 };
