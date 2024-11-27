@@ -11,7 +11,7 @@ UEventsManager* UEventsManager::Get()
 		Instance = NewObject<UEventsManager>();
 		Instance->AddToRoot(); // Prevent garbage collection
 	}
-	UE_LOG(LogTemp, Warning, TEXT("EventsManager Get Called"));
+	// UE_LOG(LogTemp, Warning, TEXT("EventsManager Get Called"));
 
 	return Instance;
 }
@@ -44,7 +44,7 @@ void UEventsManager::Invoke(FName eventName)
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("asadsdad"));
+		UE_LOG(LogTemp, Warning, TEXT("Event %s not found."), *eventName.ToString());
 	}
 }
 
@@ -143,4 +143,3 @@ void UEventsManager::Invoke(FName eventName, int param1, int param2)
 		UE_LOG(LogTemp, Warning, TEXT("Event %s not found."), *eventName.ToString());
 	}
 }
-
