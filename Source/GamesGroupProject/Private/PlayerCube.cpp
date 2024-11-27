@@ -2,18 +2,19 @@
 
 
 #include "PlayerCube.h"
+
+#include "EventsManager.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "Camera/CameraComponent.h" 
+#include "Camera/CameraComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/InputComponent.h"
 #include "GameFramework/Controller.h"
 
 
-
 // Sets default values
 APlayerCube::APlayerCube()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	// creation and set up of the spring arm for our character cube.
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComponent"));
@@ -29,43 +30,38 @@ APlayerCube::APlayerCube()
 
 	DefaultTurningRate = 70.0f;
 	DefaultLookUpRate = 45.0f;
-
-}	
+}
 
 
 // Called when the game starts or when spawned
 void APlayerCube::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 void APlayerCube::MoveForward(float Value)
 {
-	if((Controller) && (Value != 0.0f))
+	if ((Controller) && (Value != 0.0f))
 	{
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation = FRotator(0.0f, Rotation.Yaw, 0.0f);
 
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 		AddMovementInput(Direction, Value);
-		
 	}
 }
 
 void APlayerCube::MoveRight(float Value)
 {
-	if((Controller) && (Value != 0.0f))
+	if ((Controller) && (Value != 0.0f))
 	{
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation = FRotator(0.0f, Rotation.Yaw, 0.0f);
 
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 		AddMovementInput(Direction, Value);
-		
 	}
 }
-
 
 
 void APlayerCube::LookUpRate(float Value)
@@ -80,6 +76,7 @@ void APlayerCube::TurningRate(float Value)
 
 void APlayerCube::Interact()
 {
+	UEventsManager::Get()->Invoke("InteractEvent");
 	UE_LOG(LogTemp, Warning, TEXT("Interact input pressed"));
 }
 
@@ -132,7 +129,6 @@ void APlayerCube::Pause()
 void APlayerCube::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input
@@ -151,25 +147,22 @@ void APlayerCube::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	PlayerInputComponent->BindAction("CardSelectRight", IE_Pressed, this, &APlayerCube::CardSelectRight);
 	// Hold and drop items
 	PlayerInputComponent->BindAction("HoldItem", IE_Pressed, this, &APlayerCube::HoldItem);
-	PlayerInputComponent->BindAction("HoldItem" , IE_Released, this, &APlayerCube::DropHeldItem);
+	PlayerInputComponent->BindAction("HoldItem", IE_Released, this, &APlayerCube::DropHeldItem);
 	// Shoot and stop shooting
 	PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &APlayerCube::Shoot);
 	PlayerInputComponent->BindAction("Shoot", IE_Released, this, &APlayerCube::StopShooting);
-	
+
 	//Toggle Waypoint
 	PlayerInputComponent->BindAction("ToggleWaypoint", IE_Pressed, this, &APlayerCube::ToggleWaypoint);
 
 	PlayerInputComponent->BindAction("Pause", IE_Pressed, this, &APlayerCube::Pause);
-	
+
 	// Axis bindings for movement functions
 	PlayerInputComponent->BindAxis("MoveForward", this, &APlayerCube::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &APlayerCube::MoveRight);
 
-	
+
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
 	//PlayerInputComponent->BindAxis("TurningRate", this, &APlayerCube::TurningRate);
-	
-
 }
-
