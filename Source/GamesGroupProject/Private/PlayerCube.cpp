@@ -35,6 +35,7 @@ APlayerCube::APlayerCube()
 	DefaultLookUpRate = 45.0f;
 
 	AttackDetectionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("DetectionSphere"));
+	AttackDetectionSphere->SetupAttachment(RootComponent);
 	AttackDetectionSphere->InitSphereRadius(AimRadius);
 	AttackDetectionSphere->SetCollisionProfileName(TEXT("OverlapAllDynamic"));
 	AttackDetectionSphere->SetLineThickness(1);

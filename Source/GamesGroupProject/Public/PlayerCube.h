@@ -65,7 +65,7 @@ protected:
 	USphereComponent* AttackDetectionSphere;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category= "AttackDetection")
-	float AimRadius = 100.0f;
+	float AimRadius = 500.0f;
 
 	UPROPERTY(VisibleAnywhere, Category = "AttackDetection")
 	TArray<AAIEnemy*> TargetEnemiesInRange;

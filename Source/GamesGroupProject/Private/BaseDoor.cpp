@@ -1,6 +1,7 @@
+#include "BaseDoor.h"
 #include "EventsManager.h"
 #include "GameFramework/RotatingMovementComponent.h"
-#include "BaseDoor.h"
+
 
 ABaseDoor::ABaseDoor()
 {
