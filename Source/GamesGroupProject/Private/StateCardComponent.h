@@ -32,5 +32,6 @@ public:
 	virtual bool ActivateCard() override;
 	virtual bool UseCard() override;
 	virtual bool UseCard(AActor* target) override;
+	virtual bool UseCard(AActor* target, TArray<AAIEnemy*>& otherTargets);
 	virtual bool DeactivateCard() override;
 };

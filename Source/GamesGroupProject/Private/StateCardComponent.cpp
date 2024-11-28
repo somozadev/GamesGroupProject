@@ -64,7 +64,22 @@ bool UStateCardComponent::UseCard()
 
 bool UStateCardComponent::UseCard(AActor* target)
 {
-	return Super::UseCard(target);
+	Super::UseCard(target);
+
+	m_timeElapsed = 0.0f;
+	m_isInUse = true;
+	//Calling player to toggle the state will happen in children
+	return true;
+}
+
+bool UStateCardComponent::UseCard(AActor* target, TArray<AAIEnemy*>& otherTargets)
+{
+	Super::UseCard(target, otherTargets);
+	
+	m_timeElapsed = 0.0f;
+	m_isInUse = true;
+	//Calling player to toggle the state will happen in children
+	return true;
 }
 
 bool UStateCardComponent::DeactivateCard()

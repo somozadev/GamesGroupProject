@@ -46,6 +46,8 @@ public:
 	void StopShooting();
 	void ToggleWaypoint();
 	void Pause();
+	void SetIsInvincible(bool i);
+	bool GetIsInvincible();
 
 protected:
 	// Called when the game starts or when spawned
@@ -73,7 +75,11 @@ protected:
 	AAIEnemy* TargetEnemy = nullptr;
 
 	TArray<UCardComponent*> CardList;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category= "Cards")
 	int CurrentCard = 0;
+
+	bool IsInvincible = false;
 
 	UFUNCTION()
 	void OnEnemyEnterRange(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
@@ -82,6 +88,9 @@ protected:
 	UFUNCTION()
 	void OnEnemyExitRange(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 						  int32 OtherBodyIndex);
+
+	UFUNCTION(BlueprintCallable)
+	void SwitchCards(bool isRight);
 
 public:	
 	// Called every frame

@@ -3,6 +3,8 @@
 
 #include "PlayerHealthComponent.h"
 
+#include "PlayerCube.h"
+
 // Sets default values for this component's properties
 UPlayerHealthComponent::UPlayerHealthComponent()
 {
@@ -31,6 +33,13 @@ void UPlayerHealthComponent::BeginPlay()
 void UPlayerHealthComponent::TakeDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType,
 	AController* InstigatedBy, AActor* DamageCauser)
 {
+	APlayerCube* Owner = Cast<APlayerCube>(GetOwner());
+	if(Owner)
+	{
+		if (Owner->GetIsInvincible())
+			return;
+	}
+	
 	if(Damage <= 0)
 	{
 		return;

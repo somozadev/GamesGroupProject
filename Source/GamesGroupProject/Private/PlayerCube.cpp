@@ -112,11 +112,15 @@ void APlayerCube::Cancel()
 void APlayerCube::CardSelectLeft()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Card Select left input pressed"));
+
+	SwitchCards(false);
 }
 
 void APlayerCube::CardSelectRight()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Card Select Right input pressed"));
+	
+	SwitchCards(true);
 }
 
 void APlayerCube::HoldItem()
@@ -139,16 +143,19 @@ void APlayerCube::Aim()
 void APlayerCube::Shoot()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Shoot input pressed"));
-
 	if (CardList.IsValidIndex(CurrentCard))
 	{
-		CardList[CurrentCard]->UseCard(TargetEnemy, TargetEnemiesInRange);
+		CardList[CurrentCard]->ActivateCard();
 	}
 }
 
 void APlayerCube::StopShooting()
 {
 	UE_LOG(LogTemp, Warning, TEXT("StopShooting input pressed"));
+	if (CardList.IsValidIndex(CurrentCard))
+	{
+		CardList[CurrentCard]->UseCard(TargetEnemy, TargetEnemiesInRange);
+	}
 }
 
 void APlayerCube::ToggleWaypoint()
@@ -161,18 +168,31 @@ void APlayerCube::Pause()
 	UE_LOG(LogTemp, Warning, TEXT("Pause input pressed"));
 }
 
+void APlayerCube::SetIsInvincible(bool i)
+{
+	IsInvincible = i;
+}
+
+bool APlayerCube::GetIsInvincible()
+{
+	return IsInvincible;
+}
+
 void APlayerCube::OnEnemyEnterRange(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+                                    UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (AAIEnemy* Enemy = Cast<AAIEnemy>(OtherActor))
 	{
-		if(!TargetEnemiesInRange.Contains(Enemy))
+		if (Enemy->GetIsAlive())
 		{
-			TargetEnemiesInRange.Add(Enemy);
-
-			if (TargetEnemy == nullptr)
+			if(!TargetEnemiesInRange.Contains(Enemy))
 			{
-				TargetEnemy = TargetEnemiesInRange[0];
+				TargetEnemiesInRange.Add(Enemy);
+
+				if (TargetEnemy == nullptr)
+				{
+					TargetEnemy = TargetEnemiesInRange[0];
+				}
 			}
 		}
 	}
@@ -199,6 +219,30 @@ void APlayerCube::OnEnemyExitRange(UPrimitiveComponent* OverlappedComp, AActor* 
 				}
 			}
 		}
+	}
+}
+
+void APlayerCube::SwitchCards(bool isRight)
+{
+	if (CardList.IsValidIndex(CurrentCard))
+	{
+		if (CardList[CurrentCard])
+		{
+			CardList[CurrentCard]->DeactivateCard();
+		}
+	}
+	
+	if (isRight)
+	{
+		CurrentCard++;
+		if (CurrentCard >= CardList.Num())
+			CurrentCard = 0;
+	}
+	else
+	{
+		CurrentCard--;
+		if (CurrentCard < 0)
+			CurrentCard = CardList.Num() - 1;
 	}
 }
 
