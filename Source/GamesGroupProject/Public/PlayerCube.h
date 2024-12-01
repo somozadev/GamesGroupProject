@@ -72,8 +72,10 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "AttackDetection")
 	TArray<AAIEnemy*> TargetEnemiesInRange;
 
+	UPROPERTY(VisibleAnywhere, Category= "Cards")
 	AAIEnemy* TargetEnemy = nullptr;
-
+	
+	UPROPERTY(VisibleAnywhere, Category= "Cards")
 	TArray<UCardComponent*> CardList;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category= "Cards")

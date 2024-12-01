@@ -73,6 +73,7 @@ bool UCardComponent::UseCard(AActor* target, TArray<AAIEnemy*>& otherTargets)
 	{
 		m_count--;
 	}
+	UseCard(target); //quick fix 4 now, as this is use card is the ony one called from input, if the specific card uses only 1 target, it gets called through here
 	return true;
 }
 
