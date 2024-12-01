@@ -6,6 +6,8 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "PlayerHealthComponent.h"
+#include "Components/ActorComponent.h"
+#include "Components/SceneComponent.h"
 #include "AttackComponent_MultiHit.h"
 
 #define AWARENESS_DISTANCE 500.0f
@@ -16,6 +18,7 @@ AAIEnemy::AAIEnemy()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	m_warningMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Warning Mesh"));
+	DropsComponent = CreateDefaultSubobject<UEnemyDropsComponent>((TEXT("DropsComponent")));
 	m_warningMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	m_warningMesh->SetVisibility(false);
 	m_warningMesh->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
@@ -273,6 +276,7 @@ bool AAIEnemy::TakeAttackDamage(int damage)
 	if (m_currentHealth <= 0)
 	{
 		m_isAlive = false;
+		DropsComponent->Drop();
 		m_controller->BrainComponent->StopLogic(FString("Enemy Dead"));
 		PrimaryActorTick.bCanEverTick = false;
 		m_warningMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
