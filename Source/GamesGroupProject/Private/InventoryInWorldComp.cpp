@@ -5,7 +5,8 @@
 
 #include "EventsManager.h"
 #include "StructForInventoryDesc.h"
-
+#include "Misc/FileHelper.h"
+#include "Misc/Paths.h"
 
 // Sets default values
 AInventoryInWorldComp::AInventoryInWorldComp()
@@ -14,6 +15,28 @@ AInventoryInWorldComp::AInventoryInWorldComp()
 	PrimaryActorTick.bCanEverTick = true;
 }
 
+
+
+
+bool AInventoryInWorldComp::save(TArray<FVector2D> replacement)
+{
+	InventoryActive = replacement;
+	return true;	
+}
+
+TArray<FVector2D> AInventoryInWorldComp::load()
+{
+	
+
+	return (InventoryActive);
+}
+
+bool AInventoryInWorldComp::clear()
+{
+	bool success = true;
+	InventoryActive.Empty();
+	return success;
+}
 
 // Called when the game starts or when spawned
 void AInventoryInWorldComp::BeginPlay()
@@ -59,30 +82,39 @@ void AInventoryInWorldComp::Tick(float DeltaTime)
 
 void AInventoryInWorldComp::AddCard(int ID)
 {
-    UE_LOG(LogTemp, Warning, TEXT("AddCard invoked with ID: %d"), ID);
+    
 	int pickpoint=-1;
 	int index=0;
+	UE_LOG(LogTemp, Warning, TEXT("AddCard invoked with ID: %d"), ID);
 	for (FtempCardBaseLine* NamedPoint:Outputingpoint )
 	{
+		
 		int workingID = NamedPoint->ID;
+		
 		if (workingID == ID)
 		{
+			UE_LOG(LogTemp, Warning, TEXT("Succeed: %d %d"), ID , workingID);
 			pickpoint = index;
 		}
 		index ++;
 	}
 	if (pickpoint != -1)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Card: %d "), ID);
 		bool test=false;
-		for (FVector2D pointer : InventoryActive)
+		for (FVector2D& pointer : InventoryActive)
 		{
-			if(pointer.X == ID)
+			int c =pointer.X;
+			if(c == ID)
 			{
 				pointer.Y=pointer.Y+1;
 				test=true;
 			}
 		}
-		InventoryActive.Add(FVector2D(ID,1));
+		if (test==false)
+		{
+			InventoryActive.Add(FVector2D(ID,1));
+		}
 		return ;
 	}
 	else return;
