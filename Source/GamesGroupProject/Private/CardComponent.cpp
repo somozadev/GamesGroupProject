@@ -38,6 +38,12 @@ void UCardComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 	// ...
 }
 
+void UCardComponent::PrintToScreenIsSelected()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("CARD XXX ")));
+
+}
+
 bool UCardComponent::ActivateCard()
 {
 	if (m_count <= 0)

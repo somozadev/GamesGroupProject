@@ -244,6 +244,7 @@ void APlayerCube::SwitchCards(bool isRight)
 		if (CurrentCard < 0)
 			CurrentCard = CardList.Num() - 1;
 	}
+	CardList[CurrentCard]->PrintToScreenIsSelected();
 }
 
 // Called every frame

@@ -28,7 +28,7 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
 	                           FActorComponentTickFunction* ThisTickFunction) override;
-
+	virtual void PrintToScreenIsSelected() override;
 	bool ActivateCard() override;
 	bool UseCard(AActor* target) override;
 	bool UseCard(AActor* target, TArray<AAIEnemy*>& otherTargets) override;

@@ -36,7 +36,7 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
+	virtual void PrintToScreenIsSelected();
 	virtual bool ActivateCard();
 	virtual bool UseCard();
 	virtual bool UseCard(AActor* target);

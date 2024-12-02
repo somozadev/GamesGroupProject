@@ -36,6 +36,11 @@ void ULightningCardComponent::TickComponent(float DeltaTime, ELevelTick TickType
 	// ...
 }
 
+void ULightningCardComponent::PrintToScreenIsSelected()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("CARD LIGHTNING ATTACK ")));
+}
+
 bool ULightningCardComponent::ActivateCard()
 {
 	return Super::ActivateCard();

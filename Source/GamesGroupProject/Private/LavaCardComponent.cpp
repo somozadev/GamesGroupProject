@@ -35,6 +35,11 @@ void ULavaCardComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 	// ...
 }
 
+void ULavaCardComponent::PrintToScreenIsSelected()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("CARD LAVA ATTACK ")));
+}
+
 bool ULavaCardComponent::ActivateCard()
 {
 	return Super::ActivateCard();

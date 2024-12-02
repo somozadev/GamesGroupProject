@@ -47,6 +47,10 @@ void ULevitateCardComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 	}
 	// ...
 }
+void ULevitateCardComponent::PrintToScreenIsSelected()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("CARD LEVITATE ABILITY ")));
+}
 
 bool ULevitateCardComponent::UseCard()
 {

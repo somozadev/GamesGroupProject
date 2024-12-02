@@ -35,6 +35,10 @@ void UInvincibilityCardComponent::TickComponent(float DeltaTime, ELevelTick Tick
 
 	// ...
 }
+void UInvincibilityCardComponent::PrintToScreenIsSelected()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("CARD INVINCIBLE ABILITY ")));
+}
 
 bool UInvincibilityCardComponent::UseCard()
 {

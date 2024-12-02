@@ -33,7 +33,7 @@ void AInventoryInWorldComp::BeginPlay()
 		for (FtempCardBaseLine* NamedPoint:Outputingpoint )
 		{
 			FString s = NamedPoint->Name;    
-			UE_LOG(LogTemp, Warning, TEXT("%s"), *s);
+			// UE_LOG(LogTemp, Warning, TEXT("%s"), *s);
 		}
 		FString inventoryroll;//=a:
 		if(inventoryroll.Contains(TEXT("Test")))
