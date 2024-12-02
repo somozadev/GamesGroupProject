@@ -5,13 +5,36 @@
 
 #include "EventsManager.h"
 #include "StructForInventoryDesc.h"
-
+#include "Misc/FileHelper.h"
+#include "Misc/Paths.h"
 
 AInventoryInWorldComp::AInventoryInWorldComp()
 {
 	PrimaryActorTick.bCanEverTick = true;
 }
 
+
+
+
+bool AInventoryInWorldComp::save(TArray<FVector2D> replacement)
+{
+	InventoryActive = replacement;
+	return true;	
+}
+
+TArray<FVector2D> AInventoryInWorldComp::load()
+{
+	
+
+	return (InventoryActive);
+}
+
+bool AInventoryInWorldComp::clear()
+{
+	bool success = true;
+	InventoryActive.Empty();
+	return success;
+}
 
 // Called when the game starts or when spawned
 void AInventoryInWorldComp::BeginPlay()
@@ -57,16 +80,18 @@ void AInventoryInWorldComp::Tick(float DeltaTime)
 
 void AInventoryInWorldComp::AddCard(int ID)
 {
+    
+	int pickpoint=-1;
+	int index=0;
 	UE_LOG(LogTemp, Warning, TEXT("AddCard invoked with ID: %d"), ID);
-
-	int pickpoint = -1;
-	int index = 0;
-
-	for (FtempCardBaseLine* NamedPoint : Outputingpoint)
+	for (FtempCardBaseLine* NamedPoint:Outputingpoint )
 	{
+		
 		int workingID = NamedPoint->ID;
+		
 		if (workingID == ID)
 		{
+			UE_LOG(LogTemp, Warning, TEXT("Succeed: %d %d"), ID , workingID);
 			pickpoint = index;
 		}
 		index++;
