@@ -23,7 +23,6 @@ void ULavaCardComponent::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
-	
 }
 
 
@@ -55,7 +54,13 @@ bool ULavaCardComponent::UseCard(AActor* target)
 		const FVector Pos = Enemy->GetActorLocation();
 		const FActorSpawnParameters SpawnParams;
 		SplashSpawnedObject = GetWorld()->SpawnActor<AActor>(SplashObject, Pos, FRotator::ZeroRotator, SpawnParams);
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Emerald, FString::Printf(TEXT("Lava splash Created!")));
+		return true;
 	}
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Emerald, FString::Printf(TEXT("Lava splash Created!")));
-	return true;
+	return false;
+}
+
+bool ULavaCardComponent::UseCard(AActor* target, TArray<AAIEnemy*>& otherTargets)
+{
+	return UseCard(target);
 }

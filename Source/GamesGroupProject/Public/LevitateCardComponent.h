@@ -3,34 +3,32 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "SpawnerCardComponent.h"
-#include "LavaCardComponent.generated.h"
+#include "StateCardComponent.h"
+#include "LevitateCardComponent.generated.h"
 
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
-class GAMESGROUPPROJECT_API ULavaCardComponent : public USpawnerCardComponent
+class GAMESGROUPPROJECT_API ULevitateCardComponent : public UStateCardComponent
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this component's properties
-	ULavaCardComponent();
+	ULevitateCardComponent();
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-	AActor* SplashSpawnedObject;
+
 public:
-	
-	UPROPERTY(EditDefaultsOnly, Category = "Card")
-	TSubclassOf<AActor> SplashObject;
-	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
 	                           FActorComponentTickFunction* ThisTickFunction) override;
 
-	bool ActivateCard() override;
-	bool UseCard(AActor* target) override;
+	bool UseCard() override;
 	bool UseCard(AActor* target, TArray<AAIEnemy*>& otherTargets) override;
+	bool DeactivateCard() override;
 
+private:
+	void ToggleMovementMode();
 };
