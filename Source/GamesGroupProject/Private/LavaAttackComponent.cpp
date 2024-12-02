@@ -6,7 +6,7 @@
 #include "EventsManager.h"
 #include "Components/SphereComponent.h"
 
-ULavaAttackComponent::ULavaAttackComponent()
+ULavaAttackComponent::ULavaAttackComponent() //WARNING-> DEPRECATED
 {
 	PrimaryComponentTick.bCanEverTick = true;
 	bIsAiming = false;
