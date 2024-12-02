@@ -17,9 +17,14 @@ public:
 	AInventoryInWorldComp();
 	UPROPERTY(EditAnywhere)
 	UDataTable* InvCardPossible;
-	UPROPERTY(VisibleAnywhere)
-	TArray<FVector2D> InventoryActive={FVector2D::ZeroVector};
-
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TArray<FVector2D> InventoryActive={FVector2D::ZeroVector}; 
+	UFUNCTION(BlueprintCallable, Category = "MID LEVEL SAVE LOAD STUFF")
+	bool save(TArray<FVector2D> replacement);
+	UFUNCTION(BlueprintCallable, Category = "MID LEVEL SAVE LOAD STUFF")
+	TArray<FVector2D> load(); 
+	UFUNCTION(BlueprintCallable, Category = "MID LEVEL SAVE LOAD STUFF")
+	bool clear();
 	//UPROPERTY(EditAnywhere)
 
 	// Called when the game starts or when spawned
