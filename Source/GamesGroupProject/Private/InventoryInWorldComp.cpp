@@ -16,26 +16,25 @@ AInventoryInWorldComp::AInventoryInWorldComp()
 }
 
 
-bool AInventoryInWorldComp::save()
-{
-	bool success = true;
 
-	//TSharedRef< FJsonObject > SaveFile = MakeShared<FJsonObject>();
-	
-	return success;
-	
+
+bool AInventoryInWorldComp::save(TArray<FVector2D> replacement)
+{
+	InventoryActive = replacement;
+	return true;	
 }
 
-bool AInventoryInWorldComp::load()
+TArray<FVector2D> AInventoryInWorldComp::load()
 {
-	bool success = true;
+	
 
-	return success;
+	return (InventoryActive);
 }
 
 bool AInventoryInWorldComp::clear()
 {
 	bool success = true;
+	InventoryActive.Empty();
 	return success;
 }
 

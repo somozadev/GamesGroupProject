@@ -20,9 +20,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TArray<FVector2D> InventoryActive={FVector2D::ZeroVector}; 
 	UFUNCTION(BlueprintCallable, Category = "MID LEVEL SAVE LOAD STUFF")
-	bool save();
+	bool save(TArray<FVector2D> replacement);
 	UFUNCTION(BlueprintCallable, Category = "MID LEVEL SAVE LOAD STUFF")
-	bool load(); 
+	TArray<FVector2D> load(); 
 	UFUNCTION(BlueprintCallable, Category = "MID LEVEL SAVE LOAD STUFF")
 	bool clear();
 	//UPROPERTY(EditAnywhere)
