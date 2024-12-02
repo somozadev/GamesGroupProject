@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "BehaviorTree/BehaviorTree.h"
+#include "EnemyDropsComponent.h"
 #include "AttackComponent.h"
 #include "AIEnemy.generated.h"
 
@@ -20,6 +21,7 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Behavior")
 		class UBehaviorTree* m_behaviorTree;
 
+	
 protected:
 	UPROPERTY(EditAnywhere, Category = "Behavior", Meta = (MakeEditWidget = true))
 		FVector m_patrolPoint1;
@@ -29,7 +31,10 @@ protected:
 		FVector m_patrolPoint3;
 	UPROPERTY(EditAnywhere, Category = "Behavior", Meta = (MakeEditWidget = true))
 		FVector m_patrolPoint4;
-
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Drops")
+	UEnemyDropsComponent* DropsComponent;
+	
 	unsigned int m_nearestPatrolPoint = 1;
 	bool m_isInChaseRange = false;
 	FVector m_currentPatrolTarget;
