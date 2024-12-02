@@ -39,9 +39,7 @@ void ULevitateCardComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 			const UCharacterMovementComponent* MovementComponent = m_player->GetCharacterMovement();
 			if (MovementComponent && MovementComponent->IsFlying())
 			{
-				float InputValue = m_player->GetInputAxisValue("FloatUpDown");
-				FVector UpwardVector = m_player->GetActorUpVector();
-				m_player->AddMovementInput(UpwardVector, InputValue);
+				m_player->AddMovementInput(FVector(0,0,1), m_player->GetInputAxisValue("Levitate"));
 			}
 		}
 	}
