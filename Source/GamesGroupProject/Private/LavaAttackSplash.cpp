@@ -37,9 +37,13 @@ void ALavaAttackSplash::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	ElapsedSplashDuration += DeltaTime;
 	ElapsedToTickDmgSplashDuration += DeltaTime;
+
 	if (ElapsedToTickDmgSplashDuration >= SplashTickDamageDuration)
 	{
-		for (AAIEnemy* Enemy : EnemiesInSplash)
+		ElapsedToTickDmgSplashDuration = 0.0f;
+		TArray<AAIEnemy*> LocalEnemies = EnemiesInSplash;
+
+		for (AAIEnemy* Enemy : LocalEnemies)
 			if (Enemy)
 				Enemy->TakeAttackDamage(Damage);
 	}

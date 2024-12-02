@@ -2,6 +2,7 @@
 #include "EventsManager.h"
 #include "GameFramework/RotatingMovementComponent.h"
 
+
 ABaseDoor::ABaseDoor()
 {
 	PrimaryActorTick.bCanEverTick = true;

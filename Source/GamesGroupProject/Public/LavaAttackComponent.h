@@ -9,7 +9,7 @@
 
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
-class GAMESGROUPPROJECT_API ULavaAttackComponent : public UActorComponent
+class GAMESGROUPPROJECT_API ULavaAttackComponent : public UActorComponent  //WARNING-> DEPRECATED
 {
 	GENERATED_BODY()
 
