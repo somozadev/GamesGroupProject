@@ -22,7 +22,9 @@ ULevitateCardComponent::ULevitateCardComponent()
 void ULevitateCardComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
+	m_player->InputComponent->BindAxis("Levitate");
+	m_player->GetCharacterMovement()->BrakingDecelerationFlying = 5000.0f;
+	m_player->GetCharacterMovement()->MaxFlySpeed = 800.0f; 
 	// ...
 }
 
@@ -39,12 +41,18 @@ void ULevitateCardComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 			const UCharacterMovementComponent* MovementComponent = m_player->GetCharacterMovement();
 			if (MovementComponent && MovementComponent->IsFlying())
 			{
-				m_player->AddMovementInput(FVector(0,0,1), m_player->GetInputAxisValue("Levitate"));
+				float InputValue = m_player->GetInputAxisValue("Levitate");
+				FVector AxisDirection = m_player->GetActorUpVector();
+				if (FMath::Abs(InputValue) > KINDA_SMALL_NUMBER)
+				{
+					m_player->AddMovementInput(AxisDirection, InputValue);
+				}
 			}
 		}
 	}
 	// ...
 }
+
 void ULevitateCardComponent::PrintToScreenIsSelected()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("CARD LEVITATE ABILITY ")));
