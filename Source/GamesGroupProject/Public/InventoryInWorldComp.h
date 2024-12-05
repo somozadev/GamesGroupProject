@@ -19,9 +19,11 @@ public:
 	UDataTable* InvCardPossible;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TArray<FVector2D> InventoryActive; //={FVector2D::ZeroVector}
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly,Category = "MID LEVEL SAVE LOAD STUFF")
 	int currentCurrency;
-	UPROPERTY(VisibleAnywhere)
+	UFUNCTION(BlueprintCallable, Category = "MID LEVEL SAVE LOAD STUFF")
+	int GetAcorns();
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	float currentHp; 
 
 	UFUNCTION(BlueprintCallable, Category = "MID LEVEL SAVE LOAD STUFF")
