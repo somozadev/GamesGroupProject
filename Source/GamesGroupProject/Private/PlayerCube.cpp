@@ -11,7 +11,7 @@
 #include "Components/SphereComponent.h"
 #include "GameFramework/Controller.h"
 #include "CardComponent.h"
-
+#include "EventsManager.h"
 
 
 // Sets default values
@@ -101,6 +101,7 @@ void APlayerCube::TurningRate(float Value)
 
 void APlayerCube::Interact()
 {
+	UEventsManager::Get()->Invoke("InteractEvent");
 	UE_LOG(LogTemp, Warning, TEXT("Interact input pressed"));
 }
 
