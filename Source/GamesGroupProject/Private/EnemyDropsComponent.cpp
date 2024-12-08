@@ -13,6 +13,7 @@ UEnemyDropsComponent::UEnemyDropsComponent()
 
 void UEnemyDropsComponent::Drop()
 {
+	UE_LOG(LogTemp, Error, TEXT("DROPCALLED"));
 	FDropItems DropItems;
 	DropItems = GetProbabilityDrop(dropType, Level);
 	SpawnItems(DropItems);
@@ -92,6 +93,8 @@ void UEnemyDropsComponent::OnItemsDropped()
 
 void UEnemyDropsComponent::SpawnItems(const FDropItems& Items)
 {
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("SPAWN DROP CALLED ")));
+
 	if (Items.Acorns > 0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Spawning %d Acorn(s)"), Items.Acorns);
@@ -102,49 +105,49 @@ void UEnemyDropsComponent::SpawnItems(const FDropItems& Items)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Spawning %d Lava Combat Card(s)"), Items.Lava);
 		if (lavaBP)
-		SpawnDroppedElement(lavaBP);
+			SpawnDroppedElement(lavaBP);
 	}
 	if (Items.Thunder > 0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Spawning %d Thunder Combat Card(s)"), Items.Thunder);
 		if (thunderBP)
-		SpawnDroppedElement(thunderBP);
+			SpawnDroppedElement(thunderBP);
 	}
 	if (Items.Toxin > 0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Spawning %d Toxin Combat Card(s)"), Items.Toxin);
 		if (toxinBP)
-		SpawnDroppedElement(toxinBP);
+			SpawnDroppedElement(toxinBP);
 	}
 	if (Items.Balance > 0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Spawning %d Balance Combat Card(s)"), Items.Balance);
 		if (balanceBP)
-		SpawnDroppedElement(balanceBP);
+			SpawnDroppedElement(balanceBP);
 	}
 	if (Items.Invincibility > 0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Spawning %d Invincibility Card(s)"), Items.Invincibility);
 		if (invincibilityBP)
-		SpawnDroppedElement(invincibilityBP);
+			SpawnDroppedElement(invincibilityBP);
 	}
 	if (Items.Floating > 0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Spawning %d Invincibility Card(s)"), Items.Floating);
 		if (floatingBP)
-		SpawnDroppedElement(floatingBP);
+			SpawnDroppedElement(floatingBP);
 	}
 	if (Items.Magnetism > 0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Spawning %d Invincibility Card(s)"), Items.Magnetism);
 		if (magnetismBP)
-		SpawnDroppedElement(magnetismBP);
+			SpawnDroppedElement(magnetismBP);
 	}
 	if (Items.Laser > 0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Spawning %d Invincibility Card(s)"), Items.Laser);
 		if (laserBP)
-		SpawnDroppedElement(laserBP);
+			SpawnDroppedElement(laserBP);
 	}
 }
 
@@ -158,10 +161,24 @@ void UEnemyDropsComponent::SpawnDroppedElement(TSubclassOf<AInteractable> spawna
 		FVector randomOffset = FVector(randomX, randomY, 0.0f);
 		FVector spawnLocation = ownerLocation + randomOffset;
 
-
 		FRotator randomRotation = FRotator(0.0f, FMath::RandRange(0.0f, 360.0f), 0.0f);
 
 		AInteractable* item = GetWorld()->SpawnActor<AInteractable>(spawnable, spawnLocation, randomRotation);
+		if (item)
+		{
+			UStaticMeshComponent* meshComponent = item->FindComponentByClass<UStaticMeshComponent>();
+			if (meshComponent && meshComponent->IsSimulatingPhysics())
+			{
+				FVector launchDirection = FVector(
+					FMath::RandRange(-0.5f, 0.5f),
+					FMath::RandRange(-0.5f, 0.5f),
+					1.0f
+				).GetSafeNormal();
+
+				float launchStrength = FMath::RandRange(300.0f, 600.0f);
+				meshComponent->AddImpulse(launchDirection * launchStrength, NAME_None, true);
+			}
+		}
 	}
 }
 
