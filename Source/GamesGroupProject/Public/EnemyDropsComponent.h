@@ -9,6 +9,7 @@ UENUM(BlueprintType)
 enum class ECardDropType : uint8
 {
 	Combat UMETA(DisplayName = "Combat"),
+	Chest UMETA(DisplayName = "Chest"),
 	// Puzzle UMETA(DisplayName = "Puzzle")
 };
 
@@ -62,14 +63,14 @@ struct FDropItems
 	int32 Laser;
 
 	FDropItems() : Acorns(0), Lava(0), Thunder(0), Toxin(0), Balance(0), Invincibility(0), Floating(0), Magnetism(0),
-		Laser(0)
+	               Laser(0)
 	{
 	}
 
 	FDropItems(int32 InAcorns, int32 InLava, int32 InThunder, int32 InToxin, int32 InBalance, int32 InInvincibility,
-		int32 InFloating, int32 InMagnetism, int32 InLaser)
+	           int32 InFloating, int32 InMagnetism, int32 InLaser)
 		: Acorns(InAcorns), Lava(InLava), Thunder(InThunder), Toxin(InToxin), Balance(InBalance),
-		Invincibility(InInvincibility), Floating(InFloating), Magnetism(InMagnetism), Laser(InLaser)
+		  Invincibility(InInvincibility), Floating(InFloating), Magnetism(InMagnetism), Laser(InLaser)
 	{
 	}
 };
@@ -108,10 +109,12 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AInteractable> laserBP;
 
-
 protected:
 	virtual void BeginPlay() override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Drops")
 	float minRandomSpawnRadius;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Drops")
 	float maxRandomSpawnRadius;
 
 private:
@@ -122,9 +125,7 @@ private:
 	static FDropItems GetProbabilityDrop(ECardDropType CardDropType, ELevel Level);
 	void OnItemsDropped();
 
-
-
 public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
-		FActorComponentTickFunction* ThisTickFunction) override;
+	                           FActorComponentTickFunction* ThisTickFunction) override;
 };

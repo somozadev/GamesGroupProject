@@ -23,16 +23,21 @@ FDropItems UEnemyDropsComponent::GetProbabilityDrop(ECardDropType CardDropType, 
 {
 	FDropItems DropItems;
 	float RandomChance = FMath::FRandRange(0.f, 100.f);
+	float RandomCorn = FMath::RandRange(3, 6);
 	switch (Level)
 	{
 	case ELevel::Level1:
 		if (CardDropType == ECardDropType::Combat)
+		{
 			if (RandomChance <= 70.f)
 				DropItems = FDropItems(2, 2, 0, 0, 0, 0, 0, 0, 0);
 			else if (RandomChance <= 95.f)
 				DropItems = FDropItems(1, 1, 1, 0, 0, 0, 0, 0, 0);
 			else
 				DropItems = FDropItems(1, 1, 0, 0, 1, 0, 0, 0, 0);
+		}
+		else if (CardDropType == ECardDropType::Chest)
+			DropItems = FDropItems(RandomCorn, 0, 0, 0, 0, 0, 0, 0, 0);
 
 	// else if (CardDropType == ECardDropType::Puzzle)
 	// 	if (RandomChance <= 40.f)
@@ -43,6 +48,7 @@ FDropItems UEnemyDropsComponent::GetProbabilityDrop(ECardDropType CardDropType, 
 
 	case ELevel::Level2:
 		if (CardDropType == ECardDropType::Combat)
+		{
 			if (RandomChance <= 35.f)
 				DropItems = FDropItems(1, 2, 1, 1, 0, 0, 0, 0, 0);
 			else if (RandomChance <= 65.f)
@@ -51,6 +57,9 @@ FDropItems UEnemyDropsComponent::GetProbabilityDrop(ECardDropType CardDropType, 
 				DropItems = FDropItems(2, 0, 0, 0, 1, 1, 0, 0, 0);
 			else
 				DropItems = FDropItems(1, 1, 0, 0, 1, 0, 0, 0, 0);
+		}
+		else if (CardDropType == ECardDropType::Chest)
+			DropItems = FDropItems(RandomCorn, 0, 0, 0, 0, 0, 0, 0, 0);
 
 	// else if (CardDropType == ECardDropType::Puzzle)
 	// 	if (RandomChance <= 30.f)
@@ -61,6 +70,7 @@ FDropItems UEnemyDropsComponent::GetProbabilityDrop(ECardDropType CardDropType, 
 
 	case ELevel::Level3:
 		if (CardDropType == ECardDropType::Combat)
+		{
 			if (RandomChance <= 40.f)
 				DropItems = FDropItems(2, 1, 1, 2, 0, 0, 0, 0, 0);
 			else if (RandomChance <= 80.f)
@@ -69,6 +79,9 @@ FDropItems UEnemyDropsComponent::GetProbabilityDrop(ECardDropType CardDropType, 
 				DropItems = FDropItems(3, 0, 1, 1, 0, 0, 0, 0, 0);
 			else
 				DropItems = FDropItems(1, 0, 0, 0, 1, 1, 0, 0, 0);
+		}
+		else if (CardDropType == ECardDropType::Chest)
+			DropItems = FDropItems(RandomCorn, 0, 0, 0, 0, 0, 0, 0, 0);
 
 	// else if (CardDropType == ECardDropType::Puzzle)
 	// 	if (RandomChance <= 30.f)
@@ -97,57 +110,84 @@ void UEnemyDropsComponent::SpawnItems(const FDropItems& Items)
 
 	if (Items.Acorns > 0)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Spawning %d Acorn(s)"), Items.Acorns);
-		if (acornBP)
-			SpawnDroppedElement(acornBP);
+		for (int i = 0; i < Items.Acorns; ++i)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Spawning %d Acorn(s)"), Items.Acorns);
+			if (acornBP)
+				SpawnDroppedElement(acornBP);
+		}
 	}
 	if (Items.Lava > 0)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Spawning %d Lava Combat Card(s)"), Items.Lava);
-		if (lavaBP)
-			SpawnDroppedElement(lavaBP);
+		for (int i = 0; i < Items.Lava; ++i)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Spawning %d Lava Combat Card(s)"), Items.Lava);
+			if (lavaBP)
+				SpawnDroppedElement(lavaBP);
+		}
 	}
 	if (Items.Thunder > 0)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Spawning %d Thunder Combat Card(s)"), Items.Thunder);
-		if (thunderBP)
-			SpawnDroppedElement(thunderBP);
+		for (int i = 0; i < Items.Thunder; ++i)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Spawning %d Thunder Combat Card(s)"), Items.Thunder);
+			if (thunderBP)
+				SpawnDroppedElement(thunderBP);
+		}
 	}
 	if (Items.Toxin > 0)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Spawning %d Toxin Combat Card(s)"), Items.Toxin);
-		if (toxinBP)
-			SpawnDroppedElement(toxinBP);
+		for (int i = 0; i < Items.Toxin; ++i)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Spawning %d Toxin Combat Card(s)"), Items.Toxin);
+			if (toxinBP)
+				SpawnDroppedElement(toxinBP);
+		}
 	}
 	if (Items.Balance > 0)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Spawning %d Balance Combat Card(s)"), Items.Balance);
-		if (balanceBP)
-			SpawnDroppedElement(balanceBP);
+		for (int i = 0; i < Items.Balance; ++i)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Spawning %d Balance Combat Card(s)"), Items.Balance);
+			if (balanceBP)
+				SpawnDroppedElement(balanceBP);
+		}
 	}
 	if (Items.Invincibility > 0)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Spawning %d Invincibility Card(s)"), Items.Invincibility);
-		if (invincibilityBP)
-			SpawnDroppedElement(invincibilityBP);
+		for (int i = 0; i < Items.Invincibility; ++i)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Spawning %d Invincibility Card(s)"), Items.Invincibility);
+			if (invincibilityBP)
+				SpawnDroppedElement(invincibilityBP);
+		}
 	}
 	if (Items.Floating > 0)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Spawning %d Invincibility Card(s)"), Items.Floating);
-		if (floatingBP)
-			SpawnDroppedElement(floatingBP);
+		for (int i = 0; i < Items.Floating; ++i)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Spawning %d Invincibility Card(s)"), Items.Floating);
+			if (floatingBP)
+				SpawnDroppedElement(floatingBP);
+		}
 	}
 	if (Items.Magnetism > 0)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Spawning %d Invincibility Card(s)"), Items.Magnetism);
-		if (magnetismBP)
-			SpawnDroppedElement(magnetismBP);
+		for (int i = 0; i < Items.Magnetism; ++i)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Spawning %d Invincibility Card(s)"), Items.Magnetism);
+			if (magnetismBP)
+				SpawnDroppedElement(magnetismBP);
+		}
 	}
 	if (Items.Laser > 0)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Spawning %d Invincibility Card(s)"), Items.Laser);
-		if (laserBP)
-			SpawnDroppedElement(laserBP);
+		for (int i = 0; i < Items.Laser; ++i)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Spawning %d Invincibility Card(s)"), Items.Laser);
+			if (laserBP)
+				SpawnDroppedElement(laserBP);
+		}
 	}
 }
 
@@ -163,7 +203,11 @@ void UEnemyDropsComponent::SpawnDroppedElement(TSubclassOf<AInteractable> spawna
 
 		FRotator randomRotation = FRotator(0.0f, FMath::RandRange(0.0f, 360.0f), 0.0f);
 
-		AInteractable* item = GetWorld()->SpawnActor<AInteractable>(spawnable, spawnLocation, randomRotation);
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+		AInteractable* item = GetWorld()->SpawnActor<AInteractable>(spawnable, spawnLocation, randomRotation,
+		                                                            SpawnParams);
 		if (item)
 		{
 			UStaticMeshComponent* meshComponent = item->FindComponentByClass<UStaticMeshComponent>();
