@@ -19,9 +19,11 @@ public:
 	UDataTable* InvCardPossible;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TArray<FVector2D> InventoryActive; //={FVector2D::ZeroVector}
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly,Category = "MID LEVEL SAVE LOAD STUFF")
 	int currentCurrency;
-	UPROPERTY(VisibleAnywhere)
+	UFUNCTION(BlueprintCallable, Category = "MID LEVEL SAVE LOAD STUFF")
+	int GetAcorns();
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	float currentHp; 
 
 	UFUNCTION(BlueprintCallable, Category = "MID LEVEL SAVE LOAD STUFF")
@@ -40,15 +42,15 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	UFUNCTION() //requires to have UFUNCTION() for the eventsmanager 
 	void AddCard(int ID);
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, Category ="inventoryBlueprint")
 	bool UseCard(int ID);
-	UFUNCTION() 
+	UFUNCTION(BlueprintCallable, Category ="inventoryBlueprint") 
 	void AddCurrency(int Amount);
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, Category ="inventoryBlueprint")
 	bool UseCurrency(int Amount);
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, Category ="inventoryBlueprint")
 	float LoadCurrentHp() const;
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, Category ="inventoryBlueprint")
 	void SaveCurrentHp(float HP);
 	
 };
