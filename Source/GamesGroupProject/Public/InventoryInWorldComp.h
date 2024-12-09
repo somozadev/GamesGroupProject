@@ -42,15 +42,15 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	UFUNCTION() //requires to have UFUNCTION() for the eventsmanager 
 	void AddCard(int ID);
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, Category ="inventoryBlueprint")
 	bool UseCard(int ID);
-	UFUNCTION() 
+	UFUNCTION(BlueprintCallable, Category ="inventoryBlueprint") 
 	void AddCurrency(int Amount);
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, Category ="inventoryBlueprint")
 	bool UseCurrency(int Amount);
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, Category ="inventoryBlueprint")
 	float LoadCurrentHp() const;
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, Category ="inventoryBlueprint")
 	void SaveCurrentHp(float HP);
 	
 };
