@@ -18,6 +18,9 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+	AActor* SecondSpawnedSplash;
+	AActor* ThirdSpawnedSplash;
+
 public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
