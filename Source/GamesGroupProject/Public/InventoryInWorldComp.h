@@ -17,9 +17,9 @@ public:
 	AInventoryInWorldComp();
 	UPROPERTY(EditAnywhere)
 	UDataTable* InvCardPossible;
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	TArray<FVector2D> InventoryActive; //={FVector2D::ZeroVector}
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	int currentCurrency;
 	UPROPERTY(VisibleAnywhere)
 	float currentHp; 
