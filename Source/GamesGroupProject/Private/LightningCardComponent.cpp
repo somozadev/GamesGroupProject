@@ -122,6 +122,9 @@ bool ULightningCardComponent::UseCard(AActor* target, TArray<AAIEnemy*>& otherTa
 			}
 		}
 
+		AAIEnemy* otherEnemyOne = nullptr;
+		AAIEnemy* otherEnemyTwo = nullptr;
+
 		if (nearestIndexOne != -1 && nearestIndexOne < otherTargets.Num())
 		{
 			if (SplashObject)
@@ -133,7 +136,7 @@ bool ULightningCardComponent::UseCard(AActor* target, TArray<AAIEnemy*>& otherTa
 				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Emerald, FString::Printf(TEXT("Lava splash Created!")));
 			}
 			
-			otherTargets[nearestIndexOne]->TakeAttackDamage(m_damage);
+			otherEnemyOne = otherTargets[nearestIndexOne];
 		}
 
 		if (nearestIndexTwo != -1 && nearestIndexTwo < otherTargets.Num())
@@ -147,8 +150,14 @@ bool ULightningCardComponent::UseCard(AActor* target, TArray<AAIEnemy*>& otherTa
 				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Emerald, FString::Printf(TEXT("Lava splash Created!")));
 			}
 			
-			otherTargets[nearestIndexTwo]->TakeAttackDamage(m_damage);
+			otherEnemyTwo = otherTargets[nearestIndexTwo];
 		}
+
+		if (otherEnemyOne != nullptr)
+			otherEnemyOne->TakeAttackDamage(m_damage);
+
+		if (otherEnemyTwo != nullptr)
+			otherEnemyTwo->TakeAttackDamage(m_damage);
 
 		enemy->TakeAttackDamage(m_damage);
 	}

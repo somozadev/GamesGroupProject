@@ -186,7 +186,10 @@ void AAIEnemy::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	if (!m_isAlive)
+	{
+		Destroy();
 		return;
+	}
 
 	if (m_multihitTimer > 0.0f)
 	{
@@ -278,12 +281,12 @@ bool AAIEnemy::TakeAttackDamage(int damage)
 		m_isAlive = false;
 		DropsComponent->Drop();
 		m_controller->BrainComponent->StopLogic(FString("Enemy Dead"));
-		PrimaryActorTick.bCanEverTick = false;
+		//PrimaryActorTick.bCanEverTick = false;
 		m_warningMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		m_warningMesh->SetVisibility(false);
 		SetActorEnableCollision(false);
 		GetMesh()->SetVisibility(false);
-		Destroy();
+		//Destroy();
 	}
 		
 	//TO DO: Play death animation/deactivate if enemy dies
