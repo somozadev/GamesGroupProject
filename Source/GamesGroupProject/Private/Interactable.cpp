@@ -1,4 +1,6 @@
 #include "Interactable.h"
+
+#include "PlayerCube.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/Pawn.h"
 #include "Kismet/GameplayStatics.h"
@@ -12,8 +14,18 @@ AInteractable::AInteractable()
 	isCharmed = false;
 	InContact = false;
 	TriggerZone = CreateDefaultSubobject<UBoxComponent>(TEXT("TriggerZone"));
-	TriggerZone->SetBoxExtent(FVector(100.0f, 100.0f, 100.0f)); //maybe expose the size
-	TriggerZone->SetCollisionProfileName(TEXT("Trigger"));
+	TriggerZone->SetBoxExtent(FVector(100.0f, 100.0f, 100.0f)); 
+	TriggerZone->SetCollisionEnabled(ECollisionEnabled::QueryOnly); 
+	TriggerZone->SetCollisionObjectType(ECC_WorldDynamic); 
+	TriggerZone->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+	TriggerZone->SetCollisionResponseToChannel(ECC_Visibility, ECollisionResponse::ECR_Ignore);
+	TriggerZone->SetCollisionResponseToChannel(ECC_WorldStatic, ECollisionResponse::ECR_Ignore);
+	TriggerZone->SetCollisionResponseToChannel(ECC_WorldDynamic, ECollisionResponse::ECR_Ignore);
+	TriggerZone->SetCollisionResponseToChannel(ECC_Pawn, ECollisionResponse::ECR_Overlap);
+	TriggerZone->SetCollisionResponseToChannel(ECC_PhysicsBody, ECollisionResponse::ECR_Ignore);
+	TriggerZone->SetCollisionResponseToChannel(ECC_Vehicle, ECollisionResponse::ECR_Ignore);
+	TriggerZone->SetCollisionResponseToChannel(ECC_Destructible, ECollisionResponse::ECR_Ignore);
+	
 	TriggerZone->SetupAttachment(RootComponent);
 	TriggerZone->OnComponentBeginOverlap.AddDynamic(this, &AInteractable::OnTriggerEnter);
 	TriggerZone->OnComponentEndOverlap.AddDynamic(this, &AInteractable::OnTriggerExit);
@@ -26,6 +38,16 @@ AInteractable::AInteractable()
 void AInteractable::BeginPlay()
 {
 	Super::BeginPlay();
+	UStaticMeshComponent* MeshComponent = FindComponentByClass<UStaticMeshComponent>();
+	if (MeshComponent)
+	{
+		MeshComponent->SetSimulatePhysics(true); 
+		MeshComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics); 
+		MeshComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block); 
+		MeshComponent->SetCollisionResponseToChannel(ECC_Pawn, ECollisionResponse::ECR_Overlap);
+		MeshComponent->SetCollisionObjectType(ECC_PhysicsBody);
+	}
+
 	targetPlayer = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
 }
 
@@ -97,7 +119,7 @@ void AInteractable::OnTriggerEnter(UPrimitiveComponent* OverlappedComponent, AAc
                                    UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
                                    const FHitResult& SweepResult)
 {
-	if (useTriggers && OtherActor->IsA(APawn::StaticClass()))
+	if (useTriggers && OtherActor->IsA(APlayerCube::StaticClass()))
 	{
 		PerformInteraction(OtherActor);
 		InContact = true;
@@ -107,7 +129,7 @@ void AInteractable::OnTriggerEnter(UPrimitiveComponent* OverlappedComponent, AAc
 void AInteractable::OnTriggerExit(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
                                   UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	if (useTriggers && OtherActor->IsA(APawn::StaticClass()))
+	if (useTriggers && OtherActor->IsA(APlayerCube::StaticClass()))
 	{
 		InContact = false;
 	}

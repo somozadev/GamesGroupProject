@@ -14,7 +14,10 @@ AInventoryInWorldComp::AInventoryInWorldComp()
 }
 
 
-
+int AInventoryInWorldComp::GetAcorns()
+{
+	return(currentCurrency);
+}
 
 bool AInventoryInWorldComp::save(TArray<FVector2D> replacement)
 {
