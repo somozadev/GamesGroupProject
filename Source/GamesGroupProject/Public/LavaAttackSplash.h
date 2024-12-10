@@ -24,9 +24,6 @@ protected:
 public:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	USceneComponent* DefaultSceneRoot;
-	
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Default")
-	TObjectPtr<UStaticMeshComponent> Visuals;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Default")
 	TObjectPtr<USphereComponent> DamageArea;

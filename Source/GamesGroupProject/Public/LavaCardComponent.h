@@ -19,11 +19,8 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-	AActor* SplashSpawnedObject;
 public:
 	
-	UPROPERTY(EditDefaultsOnly, Category = "Card")
-	TSubclassOf<AActor> SplashObject;
 	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,

@@ -4,6 +4,8 @@
 #include "LightningCardComponent.h"
 
 #include "AIEnemy.h"
+#include "PlayerCube.h"
+#include "Kismet/KismetMathLibrary.h"
 
 
 // Sets default values for this component's properties
@@ -61,25 +63,25 @@ bool ULightningCardComponent::UseCard(AActor* target, TArray<AAIEnemy*>& otherTa
 
 	if (!enemy)
 		return false;
+	
+	if (!enemy)
+		return false;
+
+	if (SplashObject)
+	{
+		const FVector Pos = m_player->GetActorLocation() + ((enemy->GetActorLocation() - m_player->GetActorLocation()) / 2.0f);
+		const FRotator Rot = UKismetMathLibrary::FindLookAtRotation(m_player->GetActorLocation(), enemy->GetActorLocation());
+		const FActorSpawnParameters SpawnParams;
+		SplashSpawnedObject = GetWorld()->SpawnActor<AActor>(SplashObject, Pos, Rot, SpawnParams);
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Emerald, FString::Printf(TEXT("Lava splash Created!")));
+	}
 
 	if (otherTargets.Num() == 1)
 	{
 		enemy->TakeAttackDamage(m_damage);
 	}
-	else if (otherTargets.Num() == 2 || otherTargets.Num() == 3)
-	{
-		for (int i = 0; i < otherTargets.Num(); i++)
-		{
-			if (IsValid(otherTargets[i]))
-			{
-				otherTargets[i]->TakeAttackDamage(m_damage);
-			}
-		}
-	}
 	else
 	{
-		enemy->TakeAttackDamage(m_damage);
-
 		FVector firstEnemyPos = enemy->GetActorLocation();
 		float nearestDistOne = 9999999999999.0f;
 		float nearestDistTwo = 9999999999999.0f;
@@ -120,15 +122,44 @@ bool ULightningCardComponent::UseCard(AActor* target, TArray<AAIEnemy*>& otherTa
 			}
 		}
 
+		AAIEnemy* otherEnemyOne = nullptr;
+		AAIEnemy* otherEnemyTwo = nullptr;
+
 		if (nearestIndexOne != -1 && nearestIndexOne < otherTargets.Num())
 		{
-			otherTargets[nearestIndexOne]->TakeAttackDamage(m_damage);
+			if (SplashObject)
+			{
+				const FVector Pos = otherTargets[nearestIndexOne]->GetActorLocation() + ((enemy->GetActorLocation() - otherTargets[nearestIndexOne]->GetActorLocation()) / 2.0f);
+				const FRotator Rot = UKismetMathLibrary::FindLookAtRotation(otherTargets[nearestIndexOne]->GetActorLocation(), enemy->GetActorLocation());
+				const FActorSpawnParameters SpawnParams;
+				SecondSpawnedSplash = GetWorld()->SpawnActor<AActor>(SplashObject, Pos, Rot, SpawnParams);
+				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Emerald, FString::Printf(TEXT("Lava splash Created!")));
+			}
+			
+			otherEnemyOne = otherTargets[nearestIndexOne];
 		}
 
 		if (nearestIndexTwo != -1 && nearestIndexTwo < otherTargets.Num())
 		{
-			otherTargets[nearestIndexTwo]->TakeAttackDamage(m_damage);
+			if (SplashObject)
+			{
+				const FVector Pos = otherTargets[nearestIndexTwo]->GetActorLocation() + ((enemy->GetActorLocation() - otherTargets[nearestIndexTwo]->GetActorLocation()) / 2.0f);
+				const FRotator Rot = UKismetMathLibrary::FindLookAtRotation(otherTargets[nearestIndexTwo]->GetActorLocation(), enemy->GetActorLocation());
+				const FActorSpawnParameters SpawnParams;
+				ThirdSpawnedSplash = GetWorld()->SpawnActor<AActor>(SplashObject, Pos, Rot, SpawnParams);
+				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Emerald, FString::Printf(TEXT("Lava splash Created!")));
+			}
+			
+			otherEnemyTwo = otherTargets[nearestIndexTwo];
 		}
+
+		if (otherEnemyOne != nullptr)
+			otherEnemyOne->TakeAttackDamage(m_damage);
+
+		if (otherEnemyTwo != nullptr)
+			otherEnemyTwo->TakeAttackDamage(m_damage);
+
+		enemy->TakeAttackDamage(m_damage);
 	}
 
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, FString::Printf(TEXT("ZAP!")));
