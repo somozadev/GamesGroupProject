@@ -33,6 +33,10 @@ protected:
 	AActor* m_target;
 	int m_targetIndex;
 
+	AActor* SplashSpawnedObject;
+	UPROPERTY(EditDefaultsOnly, Category = "Card")
+	TSubclassOf<AActor> SplashObject;
+
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
