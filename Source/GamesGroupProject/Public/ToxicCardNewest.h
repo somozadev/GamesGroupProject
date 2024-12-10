@@ -13,21 +13,17 @@ UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class GAMESGROUPPROJECT_API UToxicCardNewest : public USpawnerCardComponent
 {
 	GENERATED_BODY()
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 	AActor* SplashSpawnedObject;
+
 public:
-	
-	UPROPERTY(EditDefaultsOnly, Category = "Card")
-	TSubclassOf<AActor> SplashObject;
-	
-	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
-							   FActorComponentTickFunction* ThisTickFunction) override;
+	                           FActorComponentTickFunction* ThisTickFunction) override;
 	virtual void PrintToScreenIsSelected() override;
 	bool ActivateCard() override;
 	bool UseCard(AActor* target) override;
 	bool UseCard(AActor* target, TArray<AAIEnemy*>& otherTargets) override;
-
 };
