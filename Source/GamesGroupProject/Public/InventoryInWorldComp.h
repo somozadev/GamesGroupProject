@@ -40,7 +40,7 @@ public:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	UFUNCTION() //requires to have UFUNCTION() for the eventsmanager 
+	UFUNCTION(BlueprintCallable, Category ="inventoryBlueprint") //requires to have UFUNCTION() for the eventsmanager 
 	void AddCard(int ID);
 	UFUNCTION(BlueprintCallable, Category ="inventoryBlueprint")
 	bool UseCard(int ID);
