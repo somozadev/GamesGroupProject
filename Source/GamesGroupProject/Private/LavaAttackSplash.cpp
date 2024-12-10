@@ -16,12 +16,6 @@ ALavaAttackSplash::ALavaAttackSplash()
 	DamageArea->SetCollisionResponseToAllChannels(ECR_Ignore);
 	DamageArea->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
 
-	Visuals = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Visuals"));
-	Visuals->SetupAttachment(DefaultSceneRoot);
-
-	Visuals->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	Visuals->SetCollisionResponseToAllChannels(ECR_Ignore);
-
 	DamageArea->OnComponentBeginOverlap.AddDynamic(this, &ALavaAttackSplash::OnOverlapBegin);
 	DamageArea->OnComponentEndOverlap.AddDynamic(this, &ALavaAttackSplash::OnOverlapEnd);
 	ElapsedSplashDuration = 0.0f;
