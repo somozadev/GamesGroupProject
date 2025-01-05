@@ -14,6 +14,15 @@ ABaseUseInteractable::ABaseUseInteractable()
 void ABaseUseInteractable::BeginPlay()
 {
 	Super::BeginPlay();
+	UStaticMeshComponent* MeshComponent = FindComponentByClass<UStaticMeshComponent>();
+	if (MeshComponent)
+	{
+		MeshComponent->SetSimulatePhysics(false);
+		MeshComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics); 
+		MeshComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
+		MeshComponent->SetCollisionResponseToChannel(ECC_Pawn, ECollisionResponse::ECR_Block); 
+		MeshComponent->SetCollisionObjectType(ECC_WorldStatic); 
+	}
 }
 
 

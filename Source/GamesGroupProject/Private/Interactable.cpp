@@ -26,13 +26,27 @@ AInteractable::AInteractable()
 	TriggerZone->SetCollisionResponseToChannel(ECC_Vehicle, ECollisionResponse::ECR_Ignore);
 	TriggerZone->SetCollisionResponseToChannel(ECC_Destructible, ECollisionResponse::ECR_Ignore);
 	
-	TriggerZone->SetupAttachment(RootComponent);
 	TriggerZone->OnComponentBeginOverlap.AddDynamic(this, &AInteractable::OnTriggerEnter);
 	TriggerZone->OnComponentEndOverlap.AddDynamic(this, &AInteractable::OnTriggerExit);
 
 	RotationMovement = CreateDefaultSubobject<URotatingMovementComponent>(TEXT("Rotation"));
 	RotationMovement->bRotationInLocalSpace = true;
 	RotationMovement->RotationRate = FRotator(0.0f, 180.0f, 0.0f);
+	
+	UStaticMeshComponent* MeshComponent = FindComponentByClass<UStaticMeshComponent>();
+	if (MeshComponent)
+	{
+		MeshComponent->SetSimulatePhysics(true);
+		MeshComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		MeshComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
+		MeshComponent->SetCollisionResponseToChannel(ECC_Pawn, ECollisionResponse::ECR_Overlap);
+		MeshComponent->SetCollisionObjectType(ECC_PhysicsBody);
+
+		if (TriggerZone)
+		{
+			TriggerZone->AttachToComponent(MeshComponent, FAttachmentTransformRules::KeepRelativeTransform);
+		}
+	}
 }
 
 void AInteractable::BeginPlay()
